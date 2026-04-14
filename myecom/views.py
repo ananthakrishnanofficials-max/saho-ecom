@@ -57,11 +57,8 @@ from .models import UserAddress
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import UserProfile
-import requests
-from rasa_sdk import Action, Tracker
-from rasa_sdk.executor import CollectingDispatcher
 
-from django.http import JsonResponse
+
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render
 import json
