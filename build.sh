@@ -2,6 +2,9 @@
 # exit on error
 set -o errexit
 
+echo "Fixing Python 3.12 compatibility..."
+pip install --upgrade pip setuptools
+
 echo "Installing dependencies..."
 pip install -r requirements.txt
 
