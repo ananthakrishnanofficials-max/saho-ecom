@@ -1,0 +1,288 @@
+/* Premium CSS for Your Addresses Page */
+
+.addresses-wrapper {
+    max-width: 1000px;
+    margin: 30px auto 80px;
+    flex-grow: 1;
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: var(--secondary-color, #666);
+}
+.breadcrumb a {
+    color: #007185;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.breadcrumb a:hover {
+    color: #c40000;
+    text-decoration: underline;
+}
+
+.addresses-header h1 {
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--primary-color, #1a1a1a);
+    margin: 0 0 25px 0;
+}
+
+/* Grid Layout */
+.address-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+@media(max-width: 900px) { .address-grid { grid-template-columns: repeat(2, 1fr); } }
+@media(max-width: 600px) { .address-grid { grid-template-columns: 1fr; } }
+
+/* Base Card Style */
+.address-card {
+    background: #ffffff;
+    border: 1px solid #d5d9d9;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    min-height: 280px;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.address-card:hover {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.06);
+    border-color: #bbbfbf;
+}
+
+/* Add New Address Card - Special Styling */
+.add-address-card {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border: 2px dashed #d5d9d9;
+    cursor: pointer;
+    background: #fbfbfb;
+}
+.add-address-card:hover {
+    background: #f0f2f2;
+    border-color: #007185;
+}
+.add-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: transparent;
+    color: #ccced1;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s ease;
+}
+.add-address-card:hover .add-icon {
+    color: #007185;
+}
+.add-address-card h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #565959;
+    margin: 15px 0 0 0;
+    transition: color 0.3s ease;
+}
+.add-address-card:hover h2 {
+    color: #007185;
+}
+
+/* Default Address Styling */
+.default-address {
+    border: 1px solid rgba(0, 113, 133, 0.4);
+    box-shadow: 0 0 0 2px rgba(0, 113, 133, 0.1);
+}
+
+.address-badge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #f0f2f2;
+    color: #0f1111;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 15px;
+    border-radius: 11px 11px 0 0;
+    border-bottom: 1px solid #d5d9d9;
+}
+.with-badge {
+    margin-top: 25px; /* Pushes content down so badge doesn't overlap text */
+}
+
+/* Address Typography */
+.address-content {
+    flex-grow: 1;
+}
+.address-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #0f1111;
+    margin: 0 0 10px 0;
+}
+.address-line, .address-phone {
+    font-size: 15px;
+    color: #0f1111;
+    margin: 0 0 4px 0;
+    line-height: 1.4;
+}
+
+.delivery-instructions {
+    margin-top: 15px;
+}
+.delivery-instructions a {
+    font-size: 14px;
+    color: #007185;
+    text-decoration: none;
+}
+.delivery-instructions a:hover {
+    color: #c40000;
+    text-decoration: underline;
+}
+
+/* Address Actions Footer */
+.address-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+}
+.address-actions button {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 14px;
+    color: #007185;
+    cursor: pointer;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.address-actions button:hover {
+    color: #c40000;
+    text-decoration: underline;
+}
+.action-divider {
+    color: #ddd;
+    font-size: 12px;
+}
+
+
+/* MODAL UI (Add Address Form) */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.close-modal {
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    font-size: 28px;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s;
+}
+.close-modal:hover { color: #000; }
+
+.modal-content h2 {
+    margin: 0 0 20px 0;
+    font-size: 22px;
+    color: #111;
+}
+
+/* Form Styles */
+.address-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+}
+
+.form-group input[type="text"] {
+    padding: 10px 12px;
+    border: 1px solid #a6a6a6;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-group input[type="text"]:focus {
+    border-color: #007185;
+    box-shadow: 0 0 0 3px rgba(0, 113, 133, 0.2);
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+.half {
+    flex: 1;
+}
+
+.checkbox-group {
+    flex-direction: row;
+    align-items: center;
+    margin-top: 5px;
+}
+.checkbox-group input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+.checkbox-group label {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.btn-save-address {
+    margin-top: 15px;
+    padding: 12px;
+    background: #ffd814;
+    border: 1px solid #fcd200;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-save-address:hover {
+    background: #f7ca00;
+}
+
+

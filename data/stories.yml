@@ -1,0 +1,18 @@
+version: "3.1"
+stories:
+- story: greet and goodbye
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: product search
+  steps:
+  - intent: product_search
+  - action: utter_product_search
+
+- story: track order
+  steps:
+  - intent: track_order
+  - action: utter_track_order

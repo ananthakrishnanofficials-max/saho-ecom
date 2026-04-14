@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Saho Plus Membership | SAHO STORE{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/saho_plus.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="container-custom plus-wrapper">
+    
+    <!-- Breadcrumb Menu -->
+    <nav class="breadcrumb">
+        <a href="{% url 'account' %}">Your Account</a> &rsaquo; <span>Saho Plus</span>
+    </nav>
+
+    <!-- Premium Hero Section -->
+    <section class="plus-hero">
+        <div class="plus-hero-content">
+            <h1 class="plus-logo">Saho <span>Plus</span><i class="fa-solid fa-crown"></i></h1>
+            <p class="plus-status">Welcome back, {{ user.first_name|default:"Member" }}. You are a Plus member.</p>
+            <div class="plus-details">
+                <span><i class="fa-regular fa-calendar-check"></i> Member since 2026</span>
+                <span><i class="fa-solid fa-arrows-rotate"></i> Renews on Jan 1, 2027</span>
+            </div>
+            <button class="btn-manage-plus">Manage Membership</button>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="plus-benefits-section">
+        <h2>Your Premium Benefits</h2>
+        
+        <div class="benefits-grid">
+            
+            <!-- Benefit Card 1 -->
+            <div class="benefit-card">
+                <div class="b-icon delivery-icon"><i class="fa-solid fa-rocket"></i></div>
+                <div class="b-info">
+                    <h3>Free & Fast Delivery</h3>
+                    <p>Enjoy unlimited free One-Day and Two-Day delivery on eligible items.</p>
+                </div>
+            </div>
+
+            <!-- Benefit Card 2 -->
+            <div class="benefit-card">
+                <div class="b-icon deals-icon"><i class="fa-solid fa-bolt"></i></div>
+                <div class="b-info">
+                    <h3>Early Access to Deals</h3>
+                    <p>Get 30-minute early access to Lightning Deals and exclusive sales events.</p>
+                </div>
+            </div>
+
+            <!-- Benefit Card 3 -->
+            <div class="benefit-card">
+                <div class="b-icon cashback-icon"><i class="fa-solid fa-wallet"></i></div>
+                <div class="b-info">
+                    <h3>5% Extra Cashback</h3>
+                    <p>Earn 5% flat cashback on all your orders placed using Saho Pay.</p>
+                </div>
+            </div>
+
+            <!-- Benefit Card 4 -->
+            <div class="benefit-card">
+                <div class="b-icon support-icon"><i class="fa-solid fa-headset"></i></div>
+                <div class="b-info">
+                    <h3>Priority Support</h3>
+                    <p>Skip the queue with our dedicated 24/7 premium customer support line.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Recent Savings (Gamification element) -->
+    <section class="plus-savings">
+        <div class="savings-content">
+            <h2>Your Plus Savings</h2>
+            <div class="savings-stats">
+                <div class="stat-box">
+                    <span class="stat-amount">$145.00</span>
+                    <span class="stat-label">Saved on Shipping</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-amount">$42.50</span>
+                    <span class="stat-label">Earned in Cashback</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<div class="plus-details">
+    {% if membership.is_active %}
+        <span><i class="fa-regular fa-calendar-check"></i> Member since {{ membership.start_date|date:"Y" }}</span>
+        <span><i class="fa-solid fa-arrows-rotate"></i> Renews on {{ membership.end_date|date:"M d, Y" }}</span>
+    {% else %}
+        <span><i class="fa-solid fa-circle-exclamation"></i> Regular Member</span>
+    {% endif %}
+</div>
+</main>
+{% endblock %}

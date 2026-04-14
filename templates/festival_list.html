@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Upcoming Festivals & Sales | SAHO STORE{% endblock %}
+
+{% block extra_css %}
+<!-- Specific CSS for the Festival List Page -->
+<link rel="stylesheet" href="{% static 'css/festivalist.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Beautiful Hero Section -->
+<div class="fest-list-hero">
+    <div class="hero-overlay-content">
+        <h1>Discover Upcoming Sales & Festivities</h1>
+        <p>Get ready for huge savings on the biggest events of the year.</p>
+    </div>
+</div>
+
+<main class="container-custom">
+    
+    <div class="section-header">
+        <h2 class="section-title">All Upcoming Events</h2>
+        {% if festivals %}
+            <span class="event-count">{{ festivals|length }} Events Found</span>
+        {% endif %}
+    </div>
+
+    <!-- Festive Events Grid -->
+    <div class="fest-grid">
+        {% for festival in festivals %}
+        <div class="fest-card">
+            
+            <!-- Contextual Header (Date & Loc) -->
+            <div class="fest-card-header">
+                <span class="fest-date">
+                    <i class="fa-regular fa-calendar"></i> {{ festival.date|default:"Coming Soon" }}
+                </span>
+                {% if festival.location %}
+                    <span class="fest-loc">
+                        <i class="fa-solid fa-location-dot"></i> {{ festival.location }}
+                    </span>
+                {% endif %}
+            </div>
+            
+            <!-- Body content -->
+            <div class="fest-card-body">
+                <h3>{{ festival.name }}</h3>
+                <p>{{ festival.description|default:"Exclusive blockbuster deals and offers are waiting for you during this mega celebration event."|truncatewords:25 }}</p>
+                
+                <!-- Action button anchored to bottom -->
+                <div class="mt-auto">
+                    <a href="{% url 'festival_detail' festival.id %}" class="btn-primary">
+                        View Exclusive Deals <i class="fa-solid fa-arrow-right" style="margin-left:8px; font-size:12px;"></i>
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+        {% empty %}
+        <!-- Empty State UI -->
+        <div class="empty-state">
+            <i class="fa-solid fa-calendar-xmark empty-icon"></i>
+            <h2>No Upcoming Festivals</h2>
+            <p>Check back later for exciting new sales events and festival offers!</p>
+        </div>
+        {% endfor %}
+    </div>
+    
+</main>
+{% endblock %}

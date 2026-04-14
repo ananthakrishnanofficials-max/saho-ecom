@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Us | SAHO STORE{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/contact.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="container-custom contact-wrapper">
+    
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="{% url 'account' %}">Your Account</a> &rsaquo; <span>Contact Us</span>
+    </nav>
+
+    <!-- Header Area -->
+    <section class="contact-header">
+        <div class="header-text">
+            <h1>Hello. What can we help you with?</h1>
+            <p>Our dedicated support team is available 24/7 to assist you.</p>
+        </div>
+        <div class="header-image">
+            <i class="fa-solid fa-headset"></i>
+        </div>
+    </section>
+
+    <!-- Quick Help & FAQs Grid -->
+    <section class="quick-help-section">
+        <h2>Some things you can do here</h2>
+        <div class="help-grid">
+            <a href="{% url 'orders' %}" class="help-card">
+                <i class="fa-solid fa-box-open text-blue"></i>
+                <div class="help-info">
+                    <h3>A delivery, order or return</h3>
+                    <p>Track your package, start a return, or view past orders.</p>
+                </div>
+            </a>
+            
+            <a href="{% url 'settings' %}" class="help-card">
+                <i class="fa-solid fa-shield-halved text-green"></i>
+                <div class="help-info">
+                    <h3>Login & security</h3>
+                    <p>Update your password, email, or manage 2-step verification.</p>
+                </div>
+            </a>
+
+            <a href="#" class="help-card">
+                <i class="fa-solid fa-money-check-dollar text-gold"></i>
+                <div class="help-info">
+                    <h3>Payment topics</h3>
+                    <p>Manage payment methods or view your invoice history.</p>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <hr class="contact-divider">
+
+    <!-- Direct Contact Options -->
+    <section class="contact-options-wrapper">
+        <div class="contact-methods">
+            <h2>Reach out to us</h2>
+            <p>Need more help? Choose how you'd like to get in touch with us.</p>
+            
+            <div class="method-card">
+                <div class="method-icon"><i class="fa-regular fa-comments"></i></div>
+                <div class="method-details">
+                    <h3>Live Chat</h3>
+                    <p>Get instant answers from our virtual assistant or connect with a human.</p>
+                    <button class="btn-primary-outline">Start Chatting</button>
+                    <span class="wait-time">Current wait time: <span class="highlight">~2 mins</span></span>
+                </div>
+            </div>
+
+            <div class="method-card">
+                <div class="method-icon"><i class="fa-solid fa-phone"></i></div>
+                <div class="method-details">
+                    <h3>Request a Call</h3>
+                    <p>Give us your number and we'll call you right back.</p>
+                    <button class="btn-primary-outline">Call Me</button>
+                    <span class="wait-time">Available 24/7</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Contact Form -->
+        <div class="contact-form-container">
+            <div class="form-card">
+                <h3>Send us an Email</h3>
+                <form method="POST" action="#">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label>Reason for contact</label>
+                        <select name="reason" class="form-input">
+                            <option value="where_is_my_stuff">Where is my stuff?</option>
+                            <option value="returns">Returns & Refunds</option>
+                            <option value="payment">Payment Issues</option>
+                            <option value="other">Something else</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Your Message</label>
+                        <textarea name="message" rows="5" class="form-input" placeholder="Please provide details about your issue..." required></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit-email">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+</main>
+{% endblock %}

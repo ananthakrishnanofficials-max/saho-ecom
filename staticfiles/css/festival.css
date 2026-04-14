@@ -1,0 +1,201 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  background: radial-gradient(circle at top,
+      #010a1a 0%,
+      #021b33 30%,
+      #00334e 60%,
+      #005f73 80%,
+      #2c5364 100%);
+
+
+  background-size: 400% 400%;
+  animation: oceanMove 20s ease infinite;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.top-nav {
+  display: flex;
+  justify-content: left;
+  gap: 20px;
+  padding: 8px;
+  background: transparent;
+}
+
+.nav-btn {
+  text-decoration: none;
+  color: rgb(255, 253, 253);
+  font-size: 17px;
+  padding: 10px 17px;
+  border-radius: 25px;
+  background: transparent;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.nav-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgb(255, 255, 255);
+}
+
+.marquee-container {
+  width: 100%;
+  height: 60px;
+  overflow: hidden;
+
+  display: flex;
+  align-items: center;
+
+  background: rgba(255,255,255,0.05);
+  backdrop-filter: blur(15px);
+
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+/* moving track */
+.marquee {
+  display: inline-flex;
+  gap: 50px;
+
+  white-space: nowrap;
+  animation: scrollText 20s linear infinite;
+}
+
+.marquee span:nth-child(1) {
+  color: #00f2fe;
+}
+
+.marquee span:nth-child(2) {
+  color: #4facfe;
+}
+
+.marquee span:nth-child(3) {
+  color: #43cea2;
+}
+
+.marquee span:nth-child(4) {
+  color: #66a6ff;
+}
+
+.marquee span:nth-child(5) {
+  color: #00c6ff;
+}
+
+.marquee span:nth-child(6) {
+  color: #89f7fe;
+}
+
+/* animation */
+@keyframes scrollText {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+.search-bar {
+  width: 300px;
+  display: flex;
+  align-items: right;
+  padding: 12px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #111111;
+  font-size: 16px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.search-bar::placeholder {
+  color: rgba(255, 253, 253, 0.864);
+}
+
+.search-bar:focus {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  /* ensures clicks go to input */
+  fill: rgba(255, 254, 254, 0.7);
+}
+
+.offer-banner {
+  text-align: center;
+  margin: 10px 0;
+}
+
+.offer-banner img {
+  width: 98%;       /* Full width across the page */
+  max-height: 200px; /* Limit height if needed */
+  object-fit: cover; /* Keeps image proportionate */
+  border-radius: 8px; /* Optional rounded corners */
+}
+
+/* Hover effect */
+.offer-banner img:hover {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+}
+.offer-banner img {
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.nav {
+  position: relative;
+  height: 150px; /* increase for long logo */
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+}
+
+/* LOGO CONTAINER */
+.saho-logo {
+  position: absolute;
+  top: 5px;              /* top alignment */
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+}
+
+/* LOGO IMAGE (MAKE IT LONG) */
+.saho-logo img {
+  height: 190px;          /* control height */
+  width: auto;
+
+  max-width: 360px;      /* increase for long logo */
+  object-fit: contain;
+
+  display: block;
+}
+.saho-logo img {
+  filter: drop-shadow(0 5px 20px rgba(0, 200, 255, 0.4));
+}
+.saho-logo img {
+  height: 190px;
+  max-width: 360px;   /* more wide */
+}
+.offer-banner img {
+  width: 100%;
+  height: 280px;
+
+  object-fit: cover;
+  border-radius: 12px;
+
+  transition: 0.3s;
+}
+
+.offer-banner img:hover {
+  transform: scale(1.02);
+}

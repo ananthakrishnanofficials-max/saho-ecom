@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Your Wishlist | SAHO STORE{% endblock %}
+
+{% block extra_css %}
+<!-- Specific CSS for the Wishlist Page -->
+<link rel="stylesheet" href="{% static 'css/wishlist.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="wishlist-container">
+    <div class="wishlist-header">
+        <h1>Your Wishlist</h1>
+        {% if wishlist_items %}
+            <span>{{ wishlist_items|length }} Items</span>
+        {% endif %}
+    </div>
+
+    {% if wishlist_items %}
+    <div class="wishlist-grid">
+        {% for item in wishlist_items %}
+        <div class="wishlist-card">
+            
+            <div class="wishlist-img-wrap">
+                {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                {% else %}
+                    <!-- Fallback placeholder -->
+                    <img src="{% static 'images/placeholder.jpg' %}" onerror="this.src='https://placehold.co/300x300?text=No+Image'">
+                {% endif %}
+                
+                <!-- Remove from wishlist button -->
+                <a href="{% url 'remove_from_wishlist' item.product.id %}" class="remove-btn" title="Remove from Wishlist">
+                    <i class="fa-solid fa-xmark"></i>
+                </a>
+            </div>
+
+            <div class="wishlist-info">
+                <h3><a href="{% url 'product_details' item.product.id %}">{{ item.product.name }}</a></h3>
+                
+                <div class="price-wrap">
+                    <span class="price">₹ {{ item.product.price }}</span>
+                    <!-- You can add dynamic stock checking here later if it exists on your model -->
+                    <span class="stock-status">In Stock</span>
+                </div>
+                
+                <!-- Uses the global addToCart JS function mapped in base.html -->
+                <button class="btn-primary" onclick="addToCart(event, '{{ item.product.id }}')">
+                    Add to Cart
+                </button>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-wishlist">
+        <i class="fa-regular fa-heart empty-icon"></i>
+        <h2>Your wishlist is empty</h2>
+        <p>Save items that you like to your wishlist. Review them anytime and easily move them to the cart.</p>
+        <a href="{% url 'home' %}" class="btn-primary" style="display:inline-block; margin-top:20px; width:auto; padding:12px 30px;">Continue Shopping</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

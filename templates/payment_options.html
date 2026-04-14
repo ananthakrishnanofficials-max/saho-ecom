@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Payment Options | SAHO STORE{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/payment_options.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="container-custom payment-wrapper">
+    
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="{% url 'account' %}">Your Account</a> &rsaquo; <span>Payment Options</span>
+    </nav>
+
+    <div class="payment-header">
+        <h1>Your Payment Methods</h1>
+        <p>Manage your saved cards, bank accounts, and Saho Pay balances.</p>
+    </div>
+
+    <!-- Saho Pay Balance Widget (Gamification/Premium element) -->
+    <section class="wallet-section">
+        <div class="wallet-card">
+            <div class="wallet-icon"><i class="fa-solid fa-wallet"></i></div>
+            <div class="wallet-details">
+                <h2>Saho Pay Balance</h2>
+                <div class="wallet-amount">$240.50</div>
+                <p>Use your balance for instant, 1-click checkout.</p>
+            </div>
+            <button class="btn-topup">Top Up <span>+</span></button>
+        </div>
+    </section>
+
+    <!-- Saved Cards Container -->
+    <section class="saved-methods-section">
+        <div class="section-top">
+            <h2>Saved Cards and Accounts</h2>
+            <button class="btn-add-method" onclick="document.getElementById('addPaymentModal').style.display='flex'">
+                <i class="fa-solid fa-plus"></i> Add a payment method
+            </button>
+        </div>
+
+        <div class="cards-grid">
+            
+            <!-- Default Visa Card -->
+            <div class="payment-card default-card">
+                <div class="card-badge">Default</div>
+                <div class="card-logo">
+                    <i class="fa-brands fa-cc-visa" style="color: #1434CB;"></i>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-type">Visa ending in **** 4242</h3>
+                    <p class="card-name">Anant Kumar</p>
+                    <p class="card-expire">Expires 12/2028</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action-text text-blue">Edit</button>
+                    <span class="divider">|</span>
+                    <button class="btn-action-text text-red">Remove</button>
+                </div>
+            </div>
+
+            <!-- Alternate Mastercard -->
+            <div class="payment-card">
+                <div class="card-logo">
+                    <i class="fa-brands fa-cc-mastercard" style="color: #eb001b;"></i>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-type">Mastercard ending in **** 8810</h3>
+                    <p class="card-name">Anant Kumar</p>
+                    <p class="card-expire">Expires 09/2026</p>
+                </div>
+                <div class="card-actions">
+                    <button class="btn-action-text text-blue">Edit</button>
+                    <span class="divider">|</span>
+                    <button class="btn-action-text text-red">Remove</button>
+                    <span class="divider">|</span>
+                    <button class="btn-action-text">Set as Default</button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+</main>
+
+<!-- ADD PAYMENT MODAL -->
+<div id="addPaymentModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content payment-modal">
+        <span class="close-modal" onclick="document.getElementById('addPaymentModal').style.display='none'">&times;</span>
+        <h2>Add a Credit or Debit Card</h2>
+        
+        <form method="POST" action="{% url 'payment_options' %}" class="payment-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>Card Number</label>
+                <div class="input-with-icon">
+                    <i class="fa-regular fa-credit-card"></i>
+                    <input type="text" name="card_number" required placeholder="0000 0000 0000 0000">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Name on Card</label>
+                <input type="text" name="name_on_card" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label>Expiration Date</label>
+                    <input type="text" name="expiration" required placeholder="MM/YY">
+                </div>
+                <div class="form-group half">
+                    <label>Security Code (CVV)</label>
+                    <div class="input-with-icon">
+                        <input type="password" name="cvv" required placeholder="123" maxlength="4">
+                        <i class="fa-solid fa-lock" style="color: #16a34a; font-size: 14px;"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <input type="checkbox" name="is_default" id="is_default">
+                <label for="is_default">Set as default payment method</label>
+            </div>
+
+            <button type="submit" class="btn-save-payment"><i class="fa-solid fa-shield-check"></i> Add securely</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

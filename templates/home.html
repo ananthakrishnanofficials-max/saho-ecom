@@ -1,0 +1,576 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SAHO STORE</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; }
+        h2 { color: #ffffff; margin: 50px 0; }
+        h3 { color: #fefefe; }
+        .grid { display: flex; flex-wrap: wrap; gap: 26px; justify-content: center; margin-bottom: 30px; }
+        .card { background: transparent; border-radius: 12px; box-shadow: 0 4px 12px rgba(82, 211, 228, 0.9); overflow: hidden; width: 270px; transition: transform 0.2s ease, box-shadow 0.2s ease; position: relative; }
+        .card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(245, 244, 244, 0.7); }
+        .card img { width: 100%; height: 270px; object-fit: contain; background: #fff; }
+        .card-image-wrap { position: relative; padding-top: 110%; background: #fbfbfb; overflow: hidden; }
+        .card-image-wrap img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; padding: 15px; transition: transform 0.4s; }
+        .card:hover .card-image-wrap img { transform: scale(1.05); }
+        .card-content { padding: 15px; text-align: center; }
+        .card h2 { font-size: 18px; margin: 10px 0; color: #fdfdfd; }
+        .card p { font-size: 16px; color: #fffdfd; margin: 8px 0; }
+        .card a { display: inline-block; margin-top: 10px; padding: 10px 15px; text-decoration: none; border-radius: 6px; transition: background 0.3s ease; }
+        .card a:hover { background: transparent; }
+        .card-link { text-decoration: none; color: inherit; }
+        .card-link .card { cursor: pointer; }
+        .rating { color: #ffd900; font-size: 14px; margin: 5px 0; }
+        .rating span { color: #ffffff; margin-left: 5px; font-size: 13px; }
+        .offer-badge { position: absolute; top: 10px; left: 10px; background: red; color: #fff; padding: 5px 10px; font-size: 13px; font-weight: bold; border-radius: 5px; }
+        .badge { position: absolute; right: 10px; padding: 5px 10px; font-size: 12px; color: #fff; border-radius: 5px; }
+        .bestseller { top: 10px; background: orange; justify-content: left; }
+        .trending { top: 40px; background: purple; justify-content: left; }
+        .price { font-size: 18px; font-weight: bold; color: #00ffcc; margin: 10px 0;}
+        .old-price { text-decoration: line-through; color: #888; font-size: 14px; margin-left: 8px; }
+        .price::before { content: "Now "; color: #00a403; font-size: 14px; }
+
+        /* ------------- CHATBOT DESIGN SYSTEM CSS ------------- */
+        :root {
+          --primary: #000000;
+          --primary-hover: #333333;
+          --chat-bg: #ffffff;
+          --text-main: #1d1d1f;
+          --text-muted: #86868b;
+          --bot-msg-bg: #f5f5f7;
+          --user-msg-bg: #0071e3;
+          --user-msg-text: #ffffff;
+          --shadow: 0 20px 40px rgba(0, 0, 0, 0.08), 0 8px 16px rgba(0,0,0,0.04);
+          --border-radius-lg: 24px;
+          --border-radius-sm: 18px;
+        }
+
+        #floating-chat-btn, .chatbot-window * { font-family: system-ui, -apple-system, sans-serif; box-sizing: border-box; }
+
+        #floating-chat-btn { position: fixed; bottom: 24px; right: 24px; background: var(--primary); color: white; border: none; width: 70px; height: 70px; border-radius: 50%; cursor: pointer; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: center; z-index: 9999; transition: transform 0.3s ease; padding:0;}
+        #floating-chat-btn:hover { transform: scale(1.08); }
+        #floating-chat-btn lottie-player { width: 50px; height: 50px; }
+
+        .chatbot-window { position: fixed; bottom: 100px; right: 24px; width: 380px; height: 620px; max-height: calc(100vh - 120px); background: var(--chat-bg); box-shadow: var(--shadow); border-radius: var(--border-radius-lg); display: flex; flex-direction: column; overflow: hidden; opacity: 0; pointer-events: none; transform: translateY(20px) scale(0.95); transition: opacity 0.3s ease, transform 0.3s ease; z-index: 9998; border: 1px solid rgba(0,0,0,0.05); text-align: left;}
+        .chatbot-window.open { opacity: 1; pointer-events: all; transform: translateY(0) scale(1); }
+
+        .chat-header { background: #ffffff; padding: 20px; border-bottom: 1px solid rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.02); z-index: 2; }
+        .chat-header-info { display: flex; align-items: center; gap: 12px; }
+        .bot-avatar { background: var(--primary); color: white; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .chat-header h4 { font-size: 16px; font-weight: 600; color: var(--text-main); margin: 0 0 2px 0; line-height: 1.2;}
+        .status { font-size: 13px; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+        .dot { width: 8px; height: 8px; background: #34c759; border-radius: 50%; display: inline-block; box-shadow: 0 0 0 2px rgba(52, 199, 89, 0.2); }
+        .close-btn { background: none; border: none; font-size: 26px; color: var(--text-muted); cursor: pointer; transition: color 0.2s, transform 0.2s; padding: 0; }
+        .close-btn:hover { color: var(--text-main); transform: rotate(90deg); }
+
+        .chat-messages { flex: 1; padding: 24px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; background: #fbfbfd; scroll-behavior: smooth; }
+        .chat-messages::-webkit-scrollbar { width: 6px; }
+        .chat-messages::-webkit-scrollbar-thumb { background-color: #d1d1d6; border-radius: 10px; }
+        
+        .message { max-width: 85%; display: flex; flex-direction: column; animation: slideIn 0.3s ease-out forwards; }
+        .bot-message { align-self: flex-start; }
+        .bot-message .message-content { background: var(--bot-msg-bg); color: var(--text-main); border-radius: var(--border-radius-sm) var(--border-radius-sm) var(--border-radius-sm) 4px; padding: 14px 18px; font-size: 14.5px; line-height: 1.5; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        .user-message { align-self: flex-end; }
+        .user-message .message-content { background: var(--user-msg-bg); color: var(--user-msg-text); border-radius: var(--border-radius-sm) var(--border-radius-sm) 4px var(--border-radius-sm); padding: 14px 18px; font-size: 14.5px; line-height: 1.5; box-shadow: 0 2px 5px rgba(0, 113, 227, 0.2); }
+
+        .quick-replies { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+        .quick-reply { background: #ffffff; border: 1.5px solid #e5e5ea; color: var(--text-main); padding: 10px 16px; border-radius: 20px; font-size: 13.5px; cursor: pointer; font-weight: 500; transition: all 0.2s ease; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+        .quick-reply:hover { background: var(--primary); border-color: var(--primary); color: white; transform: translateY(-1px); }
+
+        .chat-input-area { padding: 16px 20px; background: #ffffff; border-top: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; gap: 12px; z-index: 2; }
+        #chat-input { flex: 1; border: none; background: var(--bot-msg-bg); padding: 15px 20px; border-radius: 24px; font-size: 14.5px; outline: none; color: var(--text-main); transition: box-shadow 0.2s, background 0.2s; margin: 0; }
+        #chat-input:focus { box-shadow: 0 0 0 2px rgba(0, 113, 227, 0.2); background: #ffffff; border: 1px solid rgba(0, 113, 227, 0.2); }
+        .send-btn { background: var(--user-msg-bg); color: white; border: none; width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; transition: background 0.2s, transform 0.2s; flex-shrink: 0; padding: 0; }
+        .send-btn:hover { background: #005bb5; transform: scale(1.05); }
+        
+        .typing-indicator { display: flex; align-items: center; gap: 5px; padding: 16px 20px !important; min-height: 44px; }
+        .typing-indicator span { width: 6px; height: 6px; background: var(--text-muted); border-radius: 50%; animation: bounce 1.4s infinite ease-in-out both; }
+        .typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+        .typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); opacity: 0.3; } 40% { transform: scale(1); opacity: 1; } }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+
+<body>
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+    <div class="nav">
+        <div class="saho-logo">
+            <img src="{% static 'images/saho1.png' %}" alt="SAHO Logo">
+        </div>
+    </div>
+
+    <div class="marquee-container">
+        <div class="marquee">
+            <span>Saho Ecom - “Shop smarter, live better.” - “Flat 25% Off — Limited Time Only!” “Where trust meets tradition.” Saho Store: Your trusted shopping partner.” Saho Ecom</span>
+        </div>
+    </div>
+
+    <nav class="top-nav">
+        <a href="{% url 'homedecor' %}" class="nav-btn"><i class="fa fa-gift"></i> Home & Decor</a>
+        <a href="{% url 'mobile' %}" class="nav-btn"><i class="fa fa-mobile-alt"></i> Mobile</a>
+        <a href="{% url 'fashion' %}" class="nav-btn"><i class="fa fa-tshirt"></i> FASHION</a>
+        <a href="{% url 'electronics' %}" class="nav-btn"><i class="fa fa-tv"></i> ELECTRONICS</a>
+        <a href="{% url 'healthcare' %}" class="nav-btn"><i class="fa fa-medkit"></i> HEALTHCARE</a>
+        <a href="{% url 'grocery' %}" class="nav-btn"><i class="fa fa-shopping-basket"></i> GROCERY</a>
+        <a href="/account" class="nav-btn"><i class="fa fa-user"></i> Account</a>
+        <a href="/cart" class="nav-btn"><i class="fa fa-shopping-cart"></i> Cart</a>
+        <a href="/wishlist" class="nav-btn"><i class="fa fa-heart"></i> Wishlist</a>
+        <a href="{% url 'about' %}" class="nav-btn"><i class="fa fa-info-circle"></i> ABOUT US</a>
+    </nav>
+
+    <div class="search-container">
+        <input type="text" id="searchInput" class="search-bar" placeholder="Search products..." autocomplete="off">
+        <button class="search-btn"><i class="fa fa-search"></i></button>
+        <div id="suggestions"></div>
+    </div>
+
+    <div class="offer-banner">
+        <a href="{% url 'festival' %}">
+            <video autoplay muted loop playsinline>
+                <source src="/static/video/offban.mp4" type="video/mp4">
+            </video>
+        </a>
+    </div>
+
+    <!--HERO SECTIONS-->
+    <section class="hero-slider">
+        <div class="hero-track">
+            <div class="hero-slide">
+                <img class="hero-bg" src="/static/images/iphone.png" alt="">
+                <div class="hero-overlay"></div>
+                <div class="hero-content">
+                    <h1>SAMRTPHONES</h1>
+                    <p>Latest smartphones at unbeatable prices</p>
+                    <p class="offer">Up to 30% OFF</p>
+                    <a href="{% url 'mobile' %}" class="shop-btn">Shop Now</a>
+                </div>
+            </div>
+            <!-- More slides ... -->
+        </div>
+    </section>
+
+    <!-- ================= CHATBOT FULL HTML ================= -->
+    <button id="floating-chat-btn">
+        <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_1pxqjqps.json" background="transparent" speed="1" loop autoplay></lottie-player>
+    </button>
+
+    <div id="chatbot-window" class="chatbot-window">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="chat-header-info">
+                <div class="bot-avatar"><i class='bx bx-store-alt'></i></div>
+                <div>
+                    <h4>Saho Assistant</h4>
+                    <span class="status"><span class="dot"></span> Online</span>
+                </div>
+            </div>
+            <button class="close-btn" id="close-chatbot"><i class='bx bx-x'></i></button>
+        </div>
+
+        <div id="chat-messages" class="chat-messages">
+            <div class="message bot-message">
+                <div class="message-content">Hi there! 👋 Welcome to Saho Store. I'm your virtual shopping assistant. How can I help you today?</div>
+            </div>
+            <div class="message bot-message" id="quick-replies-container">
+                <div class="quick-replies">
+                    <button class="quick-reply">Track my Order</button>
+                    <button class="quick-reply">Return & Refunds</button>
+                    <button class="quick-reply">Contact Support</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input id="chat-input" type="text" placeholder="Type a message..." autocomplete="off">
+            <button id="send-btn" class="send-btn"><i class='bx bxs-send'></i></button>
+        </div>
+    </div>
+    <!-- ============================================== -->
+
+    <div id="cartDrawer" style="position: fixed; top: 0; right: -350px; width: 320px; height: 100%; background: white; box-shadow: -4px 0 20px rgba(0,0,0,0.2); z-index: 99999; transition: right 0.4s ease;">
+        <div style="padding:15px; background:#111; color:white; display:flex; justify-content:space-between;">
+            <h3>🛒 Cart</h3>
+            <span onclick="closeCart()" style="cursor:pointer;">✖</span>
+        </div>
+        <div id="cartItems" style="padding:15px;">
+            <p>No items yet</p>
+        </div>
+    </div>
+
+    <!-- CLEANED UP DJANGO TAGS FOR PRODUCTS GRID -->
+        <h2 class="section-title"> Home & Decor </h2>
+    <div class="grid">
+        {% for product in home_decor %}
+        <div class="card" data-url="{% url 'product_details' product.id %}">
+            {% if product.discount_percentage %}<div class="offer-badge">-{{ product.discount_percentage }}%</div>{% endif %}
+            {% if product.is_bestseller %}<div class="badge bestseller">🔥 Bestseller</div>{% endif %}
+            {% if product.is_trending %}<div class="badge trending">🚀 Trending</div>{% endif %}
+            {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<img src="https://placehold.co/400x400?text=No+Image" alt="Placeholder">{% endif %}
+            <div class="card-content">
+                <h3>{{ product.name }}</h3>
+                <div class="rating">
+                    {% for i in "12345" %}{% if forloop.counter <= product.rating %} <i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}{% endfor %}
+                    <span>({{ product.rating }})</span>
+                </div>
+                <p class="price">₹{{ product.price }} {% if product.original_price %}<span class="old-price">₹{{ product.original_price }}</span>{% endif %}</p>
+                <button class="btn-add-cart" onclick="addToCart(event, '{{ product.id }}')"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                <button type="button" onclick="toggleWishlist(event, '{{ product.id }}')" class="wishlist-btn"><span class="heart">♡</span></button>
+                <a href="{% url 'product_details' product.pk %}" class="card-link"></a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No Home & Decor products</p>
+        {% endfor %}
+    </div>
+
+    <h2 class="section-title"> Mobile </h2>
+    <div class="grid">
+        {% for product in mobile %}
+        <div class="card" data-url="{% url 'product_details' product.id %}">
+            {% if product.discount_percentage %}<div class="offer-badge">-{{ product.discount_percentage }}%</div>{% endif %}
+            {% if product.is_bestseller %}<div class="badge bestseller">🔥 Bestseller</div>{% endif %}
+            {% if product.is_trending %}<div class="badge trending">🚀 Trending</div>{% endif %}
+            {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<img src="https://placehold.co/400x400?text=No+Image" alt="Placeholder">{% endif %}
+            <div class="card-content">
+                <h3>{{ product.name }}</h3>
+                <div class="rating">
+                    {% for i in "12345" %}{% if forloop.counter <= product.rating %} <i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}{% endfor %}
+                    <span>({{ product.rating }})</span>
+                </div>
+                <p class="price">₹{{ product.price }} {% if product.original_price %}<span class="old-price">₹{{ product.original_price }}</span>{% endif %}</p>
+                <button class="btn-add-cart" onclick="addToCart(event, '{{ product.id }}')"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                <button type="button" onclick="toggleWishlist(event, '{{ product.id }}')" class="wishlist-btn"><span class="heart">♡</span></button>
+                <a href="{% url 'product_details' product.pk %}" class="card-link"></a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No Mobile products</p>
+        {% endfor %}
+    </div>
+
+    <h2 class="section-title"> Electronics </h2>
+    <div class="grid">
+        {% for product in electronics %}
+        <div class="card" data-url="{% url 'product_details' product.id %}">
+            {% if product.discount_percentage %}<div class="offer-badge">-{{ product.discount_percentage }}%</div>{% endif %}
+            {% if product.is_bestseller %}<div class="badge bestseller">🔥 Bestseller</div>{% endif %}
+            {% if product.is_trending %}<div class="badge trending">🚀 Trending</div>{% endif %}
+            {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<img src="https://placehold.co/400x400?text=No+Image" alt="Placeholder">{% endif %}
+            <div class="card-content">
+                <h3>{{ product.name }}</h3>
+                <div class="rating">
+                    {% for i in "12345" %}{% if forloop.counter <= product.rating %} <i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}{% endfor %}
+                    <span>({{ product.rating }})</span>
+                </div>
+                <p class="price">₹{{ product.price }} {% if product.original_price %}<span class="old-price">₹{{ product.original_price }}</span>{% endif %}</p>
+                <button class="btn-add-cart" onclick="addToCart(event, '{{ product.id }}')"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                <button type="button" onclick="toggleWishlist(event, '{{ product.id }}')" class="wishlist-btn"><span class="heart">♡</span></button>
+                <a href="{% url 'product_details' product.pk %}" class="card-link"></a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No Electronic products</p>
+        {% endfor %}
+    </div>
+
+    <h2 class="section-title"> Fashion </h2>
+    <div class="grid">
+        {% for product in fashion %}
+        <div class="card" data-url="{% url 'product_details' product.id %}">
+            {% if product.discount_percentage %}<div class="offer-badge">-{{ product.discount_percentage }}%</div>{% endif %}
+            {% if product.is_bestseller %}<div class="badge bestseller">🔥 Bestseller</div>{% endif %}
+            {% if product.is_trending %}<div class="badge trending">🚀 Trending</div>{% endif %}
+            {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<img src="https://placehold.co/400x400?text=No+Image" alt="Placeholder">{% endif %}
+            <div class="card-content">
+                <h3>{{ product.name }}</h3>
+                <div class="rating">
+                    {% for i in "12345" %}{% if forloop.counter <= product.rating %} <i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}{% endfor %}
+                    <span>({{ product.rating }})</span>
+                </div>
+                <p class="price">₹{{ product.price }} {% if product.original_price %}<span class="old-price">₹{{ product.original_price }}</span>{% endif %}</p>
+                <button class="btn-add-cart" onclick="addToCart(event, '{{ product.id }}')"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                <button type="button" onclick="toggleWishlist(event, '{{ product.id }}')" class="wishlist-btn"><span class="heart">♡</span></button>
+                <a href="{% url 'product_details' product.pk %}" class="card-link"></a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No Fashion products</p>
+        {% endfor %}
+    </div>
+
+    <h2 class="section-title"> Grocery </h2>
+    <div class="grid">
+        {% for product in grocery %}
+        <div class="card" data-url="{% url 'product_details' product.id %}">
+            {% if product.discount_percentage %}<div class="offer-badge">-{{ product.discount_percentage }}%</div>{% endif %}
+            {% if product.is_bestseller %}<div class="badge bestseller">🔥 Bestseller</div>{% endif %}
+            {% if product.is_trending %}<div class="badge trending">🚀 Trending</div>{% endif %}
+            {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<img src="https://placehold.co/400x400?text=No+Image" alt="Placeholder">{% endif %}
+            <div class="card-content">
+                <h3>{{ product.name }}</h3>
+                <div class="rating">
+                    {% for i in "12345" %}{% if forloop.counter <= product.rating %} <i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}{% endfor %}
+                    <span>({{ product.rating }})</span>
+                </div>
+                <p class="price">₹{{ product.price }} {% if product.original_price %}<span class="old-price">₹{{ product.original_price }}</span>{% endif %}</p>
+                <button class="btn-add-cart" onclick="addToCart(event, '{{ product.id }}')"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                <button type="button" onclick="toggleWishlist(event, '{{ product.id }}')" class="wishlist-btn"><span class="heart">♡</span></button>
+                <a href="{% url 'product_details' product.pk %}" class="card-link"></a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No Grocery products</p>
+        {% endfor %}
+    </div>
+
+    <h2 class="section-title"> Healthcare </h2>
+    <div class="grid">
+        {% for product in healthcare %}
+        <div class="card" data-url="{% url 'product_details' product.id %}">
+            {% if product.discount_percentage %}<div class="offer-badge">-{{ product.discount_percentage }}%</div>{% endif %}
+            {% if product.is_bestseller %}<div class="badge bestseller">🔥 Bestseller</div>{% endif %}
+            {% if product.is_trending %}<div class="badge trending">🚀 Trending</div>{% endif %}
+            {% if product.image %}<img src="{{ product.image.url }}" alt="{{ product.name }}">{% else %}<img src="https://placehold.co/400x400?text=No+Image" alt="Placeholder">{% endif %}
+            <div class="card-content">
+                <h3>{{ product.name }}</h3>
+                <div class="rating">
+                    {% for i in "12345" %}{% if forloop.counter <= product.rating %} <i class="fas fa-star"></i>{% else %}<i class="far fa-star"></i>{% endif %}{% endfor %}
+                    <span>({{ product.rating }})</span>
+                </div>
+                <p class="price">₹{{ product.price }} {% if product.original_price %}<span class="old-price">₹{{ product.original_price }}</span>{% endif %}</p>
+                <button class="btn-add-cart" onclick="addToCart(event, '{{ product.id }}')"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                <button type="button" onclick="toggleWishlist(event, '{{ product.id }}')" class="wishlist-btn"><span class="heart">♡</span></button>
+                <a href="{% url 'product_details' product.pk %}" class="card-link"></a>
+            </div>
+        </div>
+        {% empty %}
+        <p>No Healthcare products</p>
+        {% endfor %}
+    </div>
+
+    <!-- MAIN FOOTER -->
+    <div class="main-content">
+        <footer class="main-footer">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h2 class="logo">SAHO<span>ECOM</span></h2>
+                    <p>Your trusted eCommerce platform for electronics, fashion, and more. Quality products at the best price.</p>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Products</h3>
+                    <ul>
+                        <li><a href="#">Electronics</a></li>
+                        <li><a href="#">Mobiles</a></li>
+                        <li><a href="#">Laptops</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Useful Links</h3>
+                    <ul>
+                        <li><a href="#">Account</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Address</h3>
+                    <p>Alathur, Kerala<br>India<br>Email: sahoecom@gmail.com</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© <span id="year"></span> SAHO ECOM. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JS SCRIPTS -->
+    <script>
+        // Chatbot Integration with your Lottie Player Button
+        const chatbotBtn = document.getElementById("floating-chat-btn");
+        const chatbotWindow = document.getElementById("chatbot-window");
+        const closeChatbotBtn = document.getElementById("close-chatbot");
+        const chatMessages = document.getElementById("chat-messages");
+        const chatInput = document.getElementById("chat-input");
+        const sendBtn = document.getElementById("send-btn");
+        const quickRepliesContainer = document.getElementById("quick-replies-container");
+
+        const toggleChat = () => {
+            chatbotWindow.classList.toggle("open");
+            if (chatbotWindow.classList.contains("open")) { chatInput.focus(); }
+        };
+
+        if(chatbotBtn) chatbotBtn.addEventListener("click", toggleChat);
+        if(closeChatbotBtn) closeChatbotBtn.addEventListener("click", toggleChat);
+
+        function appendMessage(sender, text) {
+            const msgDiv = document.createElement("div");
+            msgDiv.classList.add("message", sender === 'user' ? 'user-message' : 'bot-message');
+            msgDiv.innerHTML = `<div class="message-content">${text}</div>`;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        async function sendMessage(text = null) {
+            const message = text || chatInput.value.trim();
+            if (!message) return;
+            if (quickRepliesContainer) quickRepliesContainer.style.display = 'none';
+
+            appendMessage('user', message);
+            chatInput.value = "";
+            chatInput.focus();
+
+            const typingId = showTypingIndicator();
+
+            try {
+                // Pointing back to your Rasa Local Server
+                const response = await fetch("http://localhost:5005/webhooks/rest/webhook", {
+                    method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ sender: "user1",
+message: message })
+                });
+
+                removeTypingIndicator(typingId);
+                if (!response.ok) throw new Error("Server error: " + response.status);
+
+                const data = await response.json();
+                if (data && data.length > 0) {
+                    data.forEach(msg => { if (msg.text) appendMessage('bot', msg.text); });
+                } else {
+                    appendMessage('bot', "(No response from server)");
+                }
+            } catch (err) {
+                removeTypingIndicator(typingId);
+                appendMessage('bot', `⚠️ Could not connect to the bot: ${err.message}`);
+            }
+        }
+
+        function showTypingIndicator() {
+            const id = 'typing-' + Date.now();
+            const msgDiv = document.createElement("div");
+            msgDiv.id = id;
+            msgDiv.classList.add("message", "bot-message");
+            msgDiv.innerHTML = `<div class="message-content typing-indicator"><span></span><span></span><span></span></div>`;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            return id;
+        }
+
+        function removeTypingIndicator(id) { const el = document.getElementById(id); if (el) el.remove(); }
+
+        if(sendBtn) sendBtn.addEventListener("click", () => sendMessage());
+        if(chatInput) chatInput.addEventListener("keypress", (e) => { if (e.key === "Enter") { e.preventDefault(); sendMessage(); } });
+
+        document.querySelectorAll('.quick-reply').forEach(btn => {
+            btn.addEventListener('click', (e) => { sendMessage(e.target.innerText); });
+        });
+
+        // Global Web Functions
+        const input = document.getElementById("searchInput");
+        const suggestions = document.getElementById("suggestions");
+        if (input) {
+            input.addEventListener("keyup", function () {
+                let query = this.value;
+                if (query.length < 1) { suggestions.style.display = "none"; return; }
+                fetch(`/live-search/?q=${query}`).then(res => res.json()).then(data => {
+                    suggestions.innerHTML = "";
+                    if (data.length > 0) {
+                        suggestions.style.display = "block";
+                        data.forEach(item => {
+                            let div = document.createElement("div"); div.classList.add("suggestion-item");
+                            div.innerHTML = `<img src="${item.image}"><span>${item.name}</span>`;
+                            div.onclick = () => { window.location.href = `/product/${item.id}/`; };
+                            suggestions.appendChild(div);
+                        });
+                    } else { suggestions.style.display = "none"; }
+                });
+            });
+        }
+
+        function getCSRFToken() {
+            const tokenElement = document.querySelector('[name=csrfmiddlewaretoken]');
+            return tokenElement ? tokenElement.value : '';
+        }
+
+        function showToast(message, type = "success") {
+            let toast = document.createElement("div");
+            toast.className = "toast-message " + (type === "success" ? "toast-success" : "toast-error");
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function toggleWishlist(event, productId) {
+            event.preventDefault(); event.stopPropagation();
+            let btn = event.currentTarget;
+            fetch(`/wishlist/${productId}/`, { method: "POST", headers: { "X-CSRFToken": getCSRFToken() } })
+                .then(res => res.json()).then(data => {
+                    if (data.status === "added") {
+                        btn.classList.add("active"); btn.querySelector(".heart").innerText = "♥";
+                        showToast("❤️ Added to wishlist", "success");
+                    } else {
+                        btn.classList.remove("active"); btn.querySelector(".heart").innerText = "♡";
+                        showToast("Removed from wishlist", "error");
+                    }
+                });
+        }
+
+        function openCart() { document.getElementById("cartDrawer").style.right = "0px"; }
+        function closeCart() { document.getElementById("cartDrawer").style.right = "-350px"; }
+
+        function addToCart(event, productId) {
+            event.preventDefault(); event.stopPropagation();
+            fetch(`/add-to-cart/${productId}/`, { method: "POST", headers: { "X-CSRFToken": getCSRFToken() } })
+                .then(res => res.text())
+                .then(data => {
+                    try {
+                        let json = JSON.parse(data);
+                        if (json.status === "success") { showToast("✅ Product added successfully!"); }
+                        else { showToast("❌ Failed to add product"); }
+                    } catch (e) { showToast("✅ Product added!", "success"); }
+                }).catch(err => { showToast("❌ Network error", "error"); });
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".card").forEach(card => {
+                card.addEventListener("click", function () {
+                    const url = this.dataset.url;
+                    if (url) { window.location.href = url; }
+                });
+            });
+            const track = document.querySelector(".hero-track");
+            const slides = document.querySelectorAll(".hero-slide");
+            let index = 0;
+            if (track && slides.length > 0) {
+                setInterval(() => {
+                    index = (index + 1) % slides.length;
+                    track.style.transform = `translateX(-${index * 100}%)`;
+                }, 5000);
+            }
+            if(document.getElementById("year")) {
+                document.getElementById("year").innerText = new Date().getFullYear();
+            }
+        });
+    </script>
+</body>
+
+</html>

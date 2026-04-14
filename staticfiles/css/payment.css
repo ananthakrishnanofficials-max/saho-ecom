@@ -1,0 +1,195 @@
+/* Background */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  background: radial-gradient(circle at top,
+      #010a1a 0%,
+      #021b33 30%,
+      #00334e 60%,
+      #005f73 80%,
+      #2c5364 100%);
+
+
+  background-size: 400% 400%;
+  animation: oceanMove 20s ease infinite;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Main Container */
+.payment-container {
+    max-width: 900px;
+    margin: 60px auto;
+    display: flex;
+    gap: 30px;
+    padding: 20px;
+}
+
+/* Card Style */
+.card {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 25px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    flex: 1;
+}
+
+/* Title */
+.card h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+/* Product Image */
+.product-img {
+    width: 100%;
+    border-radius: 15px;
+    margin-bottom: 15px;
+}
+
+/* Product Name */
+.product-name {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* Price */
+.price {
+    font-size: 18px;
+    color: #00ffcc;
+    margin-top: 10px;
+}
+
+/* Payment Button */
+.pay-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #ff7e5f, #feb47b);
+    color: #fff;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 20px;
+}
+
+/* Hover Effect */
+.pay-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(255,126,95,0.7);
+}
+
+/* Input Fields */
+.input-box {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+/* Label */
+.label {
+    font-size: 14px;
+    margin-top: 10px;
+    display: block;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .payment-container {
+        flex-direction: column;
+    }
+}
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  color: #fff;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  height: 150px;
+  margin-right: 10px;
+}
+
+.brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 5px;
+  color: #fff;
+}
+
+.top-nav a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.top-nav a:hover {
+  color: #ffdd57;
+}
+h1 {
+  text-align: center;   /* centers text horizontally */
+}
+h1 {
+  display: flex;              /* allows logo + text side by side */
+  align-items: center;        /* vertically align */
+  justify-content: center;    /* center both together */
+  gap: 10px;                  /* space between logo and text */
+}
+
+h1 .logo {
+  height: 140px;               /* adjust size */
+  width: auto;
+}
+h1 {
+  font-family: 'Montserrat', sans-serif;
+  text-align: center;
+  width: fit-content;
+  margin: 20px auto;
+  font-size: 20px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 6px;
+  display: inline-block;
+  margin: 0 auto;
+
+
+  background:linear-gradient(to left, #090909, #3308ab);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+div {
+  text-align: center;
+}
+.saho-logo img {
+  height: 190px;          /* control height */
+  width: auto;
+
+  max-width: 360px;      /* increase for long logo */
+  object-fit: contain;
+
+  display: block;
+}
+.saho-logo img {
+  filter: drop-shadow(0 5px 20px rgba(0, 200, 255, 0.4));
+}
+.saho-logo img {
+  height: 190px;
+  max-width: 360px;   /* more wide */
+}

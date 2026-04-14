@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Login & Security | SAHO STORE{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="container-custom settings-wrapper">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="{% url 'account' %}">Your Account</a> &rsaquo; <span>Login & Security</span>
+    </nav>
+
+    <div class="settings-header">
+        <h1>Login & Security</h1>
+    </div>
+
+    <div class="settings-container">
+        
+        <!-- Name Settings -->
+        <div class="setting-item">
+            <div class="setting-info">
+                <span class="setting-label">Name:</span>
+                <span class="setting-value">{{ user.get_full_name|default:user.username|default:"Logged In User" }}</span>
+            </div>
+            <button class="btn-edit" onclick="toggleEdit('edit-name')">Edit</button>
+        </div>
+        <!-- Hidden Edit Form for Name -->
+        <div class="setting-edit-form" id="edit-name">
+            <form method="POST">
+                {% csrf_token %}
+                <label for="full_name">New Name</label>
+                <input type="text" id="full_name" name="full_name" value="{{ user.get_full_name|default:user.username }}" class="form-input">
+                <div class="form-actions">
+                    <button type="submit" class="btn-save">Save changes</button>
+                    <button type="button" class="btn-cancel" onclick="toggleEdit('edit-name')">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Email Settings -->
+        <div class="setting-item">
+            <div class="setting-info">
+                <span class="setting-label">Email:</span>
+                <span class="setting-value">{{ user.email|default:"No email registered" }}</span>
+            </div>
+            <button class="btn-edit" onclick="toggleEdit('edit-email')">Edit</button>
+        </div>
+        <!-- Hidden Edit Form for Email -->
+        <div class="setting-edit-form" id="edit-email">
+            <form method="POST">
+                {% csrf_token %}
+                <label for="email">New Email</label>
+                <input type="email" id="email" name="email" value="{{ user.email }}" class="form-input">
+                <div class="form-actions">
+                    <button type="submit" class="btn-save">Save changes</button>
+                    <button type="button" class="btn-cancel" onclick="toggleEdit('edit-email')">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Mobile Settings -->
+        <div class="setting-item">
+            <div class="setting-info">
+                <span class="setting-label">Mobile Number:</span>
+                <span class="setting-value">Not Added</span>
+            </div>
+            <button class="btn-edit" onclick="toggleEdit('edit-mobile')">Edit</button>
+        </div>
+        <!-- Hidden Edit Form for Mobile -->
+        <div class="setting-edit-form" id="edit-mobile">
+            <form method="POST">
+                {% csrf_token %}
+                <label for="mobile">New Mobile Number</label>
+                <input type="tel" id="mobile" name="mobile" placeholder="Enter mobile number" class="form-input">
+                <div class="form-actions">
+                    <button type="submit" class="btn-save">Save changes</button>
+                    <button type="button" class="btn-cancel" onclick="toggleEdit('edit-mobile')">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Password Settings -->
+        <div class="setting-item">
+            <div class="setting-info">
+                <span class="setting-label">Password:</span>
+                <span class="setting-value">********</span>
+            </div>
+            <button class="btn-edit" onclick="toggleEdit('edit-password')">Edit</button>
+        </div>
+        <!-- Hidden Edit Form for Password -->
+        <div class="setting-edit-form" id="edit-password">
+            <form method="POST">
+                {% csrf_token %}
+                <label for="current_password">Current Password</label>
+                <input type="password" id="current_password" name="current_password" class="form-input">
+                
+                <label for="new_password">New Password</label>
+                <input type="password" id="new_password" name="new_password" class="form-input">
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn-save">Save changes</button>
+                    <button type="button" class="btn-cancel" onclick="toggleEdit('edit-password')">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 2FA Settings (Optional Premium Feel) -->
+        <div class="setting-item">
+            <div class="setting-info">
+                <span class="setting-label">Two-Step Verification (2SV):</span>
+                <span class="setting-value text-warning">Turned off</span>
+                <p class="setting-desc">Require a code every time you sign in to boost security.</p>
+            </div>
+            <button class="btn-edit btn-turn-on">Turn On</button>
+        </div>
+
+        <!-- Delete Account -->
+        <div class="setting-item alert-zone">
+             <div class="setting-info">
+                <span class="setting-label text-danger">Delete Account:</span>
+                <p class="setting-desc">Permanently remove your account and all associated data.</p>
+            </div>
+            <button class="btn-delete">Delete</button>
+        </div>
+
+    </div>
+</main>
+
+<script>
+    // Simple script to toggle edit forms 
+    function toggleEdit(id) {
+        var form = document.getElementById(id);
+        if (form.style.display === "block") {
+            form.style.display = "none";
+        } else {
+            // Optionally, collapse other forms first
+            var forms = document.querySelectorAll('.setting-edit-form');
+            forms.forEach(function(f) {
+                f.style.display = 'none';
+            });
+            form.style.display = "block";
+        }
+    }
+</script>
+{% endblock %}

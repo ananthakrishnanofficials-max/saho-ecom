@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Category</title>
+</head>
+<body>
+
+<h2>{{ category.name }}</h2>
+{% for sub in category.subcategories.all %}
+  <div class="subcategory-block">
+    <h3>{{ sub.name }}</h3>
+    <ul>
+      {% for product in sub.products.all %}
+        <li>{{ product.name }} - ₹{{ product.price }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endfor %}
+
+</div>
+
+</body>
+</html>

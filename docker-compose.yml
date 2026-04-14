@@ -1,0 +1,48 @@
+version: "3.9"
+
+services:
+  django:
+    build:
+      context: ./myecom/django_app
+      dockerfile: Dockerfile
+    container_name: django_app
+    volumes:
+      - ./myecom/django_app:/app
+    expose:
+      - "8000"
+    depends_on:
+      - rasa
+      - actions
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx_proxy
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./myecom/django_app/static:/app/static
+    ports:
+      - "80:80"
+    depends_on:
+      - django
+
+  rasa:
+    build:
+      context: ./myecom/rasa_app
+      dockerfile: Dockerfile
+    container_name: rasa_server
+    ports:
+      - "5005:5005"
+    volumes:
+      - ./myecom/rasa_app:/app
+    depends_on:
+      - actions
+
+  actions:
+    build:
+      context: ./myecom/rasa_app
+      dockerfile: Dockerfile.actions
+    container_name: rasa_actions
+    ports:
+      - "5055:5055"
+    volumes:
+      - ./myecom/rasa_app/actions:/app/actions

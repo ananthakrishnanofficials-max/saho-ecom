@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Secure Checkout | SAHO STORE{% endblock %}
+
+{% block extra_css %}
+<!-- Specific CSS for Payment/Checkout Page -->
+<link rel="stylesheet" href="{% static 'css/payment.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="checkout-wrapper">
+    <div class="checkout-header">
+        <h1>Secure Checkout</h1>
+        <span class="secure-badge"><i class="fa-solid fa-lock"></i> 100% Secure Payment</span>
+    </div>
+
+    <div class="checkout-layout">
+        
+        <!-- LEFT SIDE: Main Checkout Flow -->
+        <div class="checkout-main">
+            
+            <!-- STEP 1: Delivery Address -->
+            <section class="checkout-step">
+                <div class="step-header">
+                    <span class="step-number">1</span>
+                    <h2>Delivery Address</h2>
+                </div>
+                <div class="step-content">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label>Mobile Number</label>
+                            <input type="tel" placeholder="+91 ">
+                        </div>
+                    </div>
+                    <div class="form-group full-width" style="margin-top:15px;">
+                        <label>Flat, House no., Building, Company, Apartment</label>
+                        <input type="text" placeholder="Address Line 1">
+                    </div>
+                    <div class="form-group full-width" style="margin-top:15px;">
+                        <label>Area, Street, Sector, Village</label>
+                        <input type="text" placeholder="Address Line 2">
+                    </div>
+                    <div class="form-grid" style="margin-top:15px;">
+                        <div class="form-group">
+                            <label>City / Town</label>
+                            <input type="text" placeholder="City">
+                        </div>
+                        <div class="form-group">
+                            <label>State</label>
+                            <!-- Would normally be a select dropdown in real life -->
+                            <input type="text" placeholder="State">
+                        </div>
+                        <div class="form-group">
+                            <label>PIN Code</label>
+                            <input type="text" placeholder="6 digits">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 2: Review Items and Delivery -->
+            <section class="checkout-step">
+                <div class="step-header">
+                    <span class="step-number">2</span>
+                    <h2>Review Item & Delivery</h2>
+                </div>
+                <div class="step-content">
+                    <div class="review-item-card">
+                        <div class="review-image">
+                            {% if product.image %}
+                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                                <img src="{% static 'images/placeholder.jpg' %}" onerror="this.src='https://placehold.co/100x100?text=Item'">
+                            {% endif %}
+                        </div>
+                        <div class="review-details">
+                            <h3>{{ product.name|default:"Sample Product Name" }}</h3>
+                            <div class="price">₹ {{ product.price|default:"999" }}</div>
+                            <div class="stock-status">In Stock</div>
+                            <div class="sold-by">Sold by: Saho Ecom</div>
+                        </div>
+                        <div class="delivery-estimate">
+                            <div class="delivery-radio active">
+                                <input type="radio" checked>
+                                <div>
+                                    <span style="font-weight:600; color:var(--success-color);">Tomorrow by 10 PM</span>
+                                    <br><span style="font-size:12px; color:var(--secondary-color);">Standard Delivery (₹40)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- STEP 3: Payment Options -->
+            <section class="checkout-step">
+                <div class="step-header">
+                    <span class="step-number">3</span>
+                    <h2>Select a Payment Method</h2>
+                </div>
+                <div class="step-content">
+                    <div class="payment-options">
+
+                        <label class="pay-option active">
+                            <div class="pay-radio">
+                                <input type="radio" name="pay" checked>
+                            </div>
+                            <div class="pay-content">
+                                <div class="pay-title">
+                                    <i class="fa-solid fa-mobile-screen" style="color:#007185;"></i> UPI Applications
+                                </div>
+                                <p>Google Pay, PhonePe, Paytm, and more</p>
+                            </div>
+                        </label>
+
+                        <label class="pay-option">
+                            <div class="pay-radio">
+                                <input type="radio" name="pay">
+                            </div>
+                            <div class="pay-content">
+                                <div class="pay-title">
+                                    <i class="fa-regular fa-credit-card" style="color:#007185;"></i> Credit or Debit Card
+                                </div>
+                                <div class="card-icons">
+                                    <i class="fa-brands fa-cc-visa"></i>
+                                    <i class="fa-brands fa-cc-mastercard"></i>
+                                    <i class="fa-brands fa-cc-amex"></i>
+                                </div>
+                            </div>
+                        </label>
+
+                        <label class="pay-option">
+                            <div class="pay-radio">
+                                <input type="radio" name="pay">
+                            </div>
+                            <div class="pay-content">
+                                <div class="pay-title">
+                                    <i class="fa-solid fa-money-bill-wave" style="color:#007185;"></i> Cash on Delivery (COD)
+                                </div>
+                                <p>Pay at the time of delivery securely.</p>
+                            </div>
+                        </label>
+
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- RIGHT SIDE: Order Summary Sidebar -->
+        <div class="checkout-sidebar">
+            <div class="summary-card">
+                
+                <button id="rzp-button" class="btn-primary" style="width:100%; margin-bottom: 20px;">
+                    Place Your Order & Pay
+                </button>
+
+                <p class="terms-text">By placing your order, you agree to Saho Store's privacy notice and conditions of use.</p>
+                
+                <hr style="border:0; border-top:1px solid var(--border-color); margin:20px 0;">
+
+                <h3 style="font-size:18px; font-weight:700; margin-bottom:15px; color:var(--primary-color);">Order Summary</h3>
+                
+                <div class="summary-table">
+                    <div class="row">
+                        <span>Items:</span>
+                        <span>₹ {{ product.price|default:"999" }}</span>
+                    </div>
+                    <div class="row">
+                        <span>Delivery & Handling:</span>
+                        <span>₹ 40</span>
+                    </div>
+                    <div class="row" style="margin-bottom:15px;">
+                        <span>Taxes:</span>
+                        <span>₹ 0</span>
+                    </div>
+                    
+                    <hr style="border:0; border-top:1px solid var(--border-color); margin:15px 0;">
+                    
+                    <div class="row total-row">
+                        <span style="font-size:20px; color:#019703;">Order Total:</span>
+                        <span style="font-size:20px; color:#00a917; font-weight:700;">₹ {{ product.price|add:40|default:"1039" }}</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top:20px; padding:15px; background:#f0f2f2; border-radius:8px; font-size:13px; color:var(--secondary-color);">
+                <i class="fa-solid fa-rotate-left" style="margin-right:5px; color:#007185;"></i>
+                You can return most items within 7 days of delivery.
+            </div>
+            <div style="text-align:center; margin-top:20px; color:#bbb; font-size:24px;">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Razorpay Checkout JS -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    // Radio toggle logic for payment options styling
+    document.querySelectorAll(".pay-option").forEach(option => {
+        option.addEventListener("click", () => {
+            document.querySelectorAll(".pay-option").forEach(o => o.classList.remove("active"));
+            option.classList.add("active");
+            option.querySelector("input").checked = true;
+        });
+    });
+
+    // Razorpay Integration Logic
+    var options = {
+        "key": "{{ razorpay_key }}", // Enter the Key ID generated from the Dashboard
+        "amount": "{{ amount }}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        "currency": "INR",
+        "name": "SAHO Store",
+        "description": "Secure Order Payment",
+        "image": "https://placehold.co/100x100?text=Saho", // You can replace with logo url
+        "order_id": "{{ razorpay_order_id }}", // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        
+        "handler": function (response){
+            alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+            window.location.href = "/success/"; // Redirect on success
+        },
+        "prefill": {
+            "name": "User Name", // You can pass {{ user.username }}
+            "email": "user@example.com", 
+            "contact": "9999999999"
+        },
+        "theme": {
+            "color": "#0f1111" // Matches primary color
+        }
+    };
+
+    var rzp = new Razorpay(options);
+    
+    document.getElementById("rzp-button").onclick = function(e){
+        rzp.open();
+        e.preventDefault();
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,262 @@
+/* Specialized CSS for Account Hub page, inherits core vars from base.css */
+
+.account-wrapper {
+    max-width: 1000px;
+    margin: 40px auto 80px;
+    flex-grow: 1;
+}
+
+.account-header h1 {
+    font-size: 28px;
+    font-weight: 500;
+    color: white;
+    margin: 0 0 25px 0;
+}
+
+/* Amazon-style Card Grid */
+.account-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+@media(max-width: 850px) { .account-grid { grid-template-columns: repeat(2, 1fr); } }
+@media(max-width: 550px) { .account-grid { grid-template-columns: 1fr; } }
+
+.account-card {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    text-decoration: none;
+    transition: background 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+}
+.account-card:hover {
+    background: #f7fafa;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.ac-icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f2f2;
+    border-radius: 50%;
+    color: #007185;
+    font-size: 24px;
+    flex-shrink: 0;
+    transition: 0.2s transform;
+}
+.account-card:hover .ac-icon {
+    transform: scale(1.05);
+}
+
+.ac-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.ac-info h3 {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--primary-color);
+    margin: 0 0 5px 0;
+}
+.ac-info p {
+    font-size: 13px;
+    color: var(--secondary-color);
+    margin: 0;
+    line-height: 1.4;
+}
+
+.account-divider {
+    border: 0;
+    border-top: 1px solid var(--border-color);
+    margin: 40px 0;
+}
+
+/* Profile Panel */
+.account-settings-form h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color:white;
+}
+
+.profile-card {
+    display: flex;
+    align-items: center;
+    padding: 30px;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    gap: 25px;
+}
+@media(max-width: 500px) {
+    .profile-card { flex-direction: column; text-align: center; }
+    .profile-actions { margin-left: 0; margin-top: 15px; }
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
+    background: #e3e6e6;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 35px;
+    color: #fff;
+    flex-shrink: 0;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.profile-details {
+    flex-grow: 1;
+}
+.profile-name {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0 0 6px 0;
+}
+.profile-email {
+    font-size: 14px;
+    color: var(--secondary-color);
+    margin: 0 0 6px 0;
+}
+.profile-joined {
+    font-size: 13px;
+    color: #007600; /* Green success tint */
+    font-weight: 500;
+    margin: 0;
+}
+
+.profile-actions {
+    margin-left: auto;
+}
+
+.btn-logout {
+    display: inline-block;
+    padding: 10px 30px;
+    background: #fff;
+    color: var(--primary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 20px; /* Pill shape */
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    transition: background 0.2s;
+}
+.btn-logout:hover {
+    background: #f7fafa;
+    color: var(--primary-color);
+}
+/* Upgraded Premium Account Cards */
+.account-card {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid rgba(0,0,0,0.06);
+    border-radius: 16px;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+/* Accent appearing on hover */
+.account-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(135deg, #007185, #00a8c6);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.account-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+    border-color: transparent;
+}
+
+.account-card:hover::before {
+    opacity: 1;
+}
+
+.ac-icon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f0f8ff, #e6f2ff);
+    border-radius: 50%;
+    color: #007185;
+    font-size: 26px;
+    flex-shrink: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.account-card:hover .ac-icon {
+    background: linear-gradient(135deg, #007185, #00a8c6);
+    color: #ffffff;
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 16px rgba(0,113,133,0.3);
+}
+
+.ac-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1; /* Pushes the chevron to the right edge */
+}
+
+.ac-info h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--primary-color, #1a1a1a);
+    margin: 0 0 4px 0;
+    transition: color 0.3s ease;
+}
+
+.account-card:hover .ac-info h3 {
+    color: #007185;
+}
+
+.ac-info p {
+    font-size: 14px;
+    color: var(--secondary-color, #666);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Action chevron sliding in */
+.ac-action {
+    color: #ccc;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    transform: translateX(-5px);
+    opacity: 0.5;
+}
+
+.account-card:hover .ac-action {
+    color: #007185;
+    transform: translateX(0);
+    opacity: 1;
+}

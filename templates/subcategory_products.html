@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+  .product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    width: 250px;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.product-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+.product-card h3 {
+    margin: 10px 0;
+    font-size: 18px;
+}
+.product-card .price {
+    font-weight: bold;
+    color: #007bff;
+}
+.product-card .btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+</style>
+<h2>{{ subcategory.name }}</h2>
+<div class="product-grid">
+    {% for product in products %}
+        <div class="product-card">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            <h3>{{ product.name }}</h3>
+            <p>{{ product.description }}</p>
+            <p class="price">₹{{ product.price }}</p>
+            <a href="{% url 'product_details' product.id %}" class="btn">View Details</a>
+        </div>
+    {% empty %}
+        <p>No products found.</p>
+    {% endfor %}
+</div>
+{% endblock %}
+

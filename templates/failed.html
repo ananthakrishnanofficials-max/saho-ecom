@@ -1,0 +1,14 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Failed</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <h1>⚠️ Payment Failed</h1>
+    <p>Something went wrong with your transaction. Please try again.</p>
+    <a href="{% url 'checkout' %}">Retry Payment</a>
+</body>
+</html>

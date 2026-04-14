@@ -1,0 +1,124 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  height: 100vh;
+  background-image: url("../images/backinlog.png");
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Glass Container */
+.settings-container{
+    width:380px;
+    padding:35px;
+
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,0.2);
+
+    box-shadow:0 8px 32px rgba(253, 251, 251, 0.25);
+
+    color:rgb(246, 242, 242);
+}
+
+/* Title */
+.settings-container h2{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+/* Labels */
+.settings-container label{
+    display:block;
+    margin-top:12px;
+    font-size:14px;
+}
+
+/* Inputs */
+.settings-container input{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+
+    border:none;
+    border-radius:8px;
+
+    background:rgba(238, 234, 234, 0.25);
+    color:rgb(214, 217, 224);
+
+    outline:none;
+}
+
+/* Input placeholder */
+.settings-container input::placeholder{
+    color:#eceef1;
+}
+
+/* Button */
+.settings-container button{
+    width:100%;
+    margin-top:20px;
+    padding:10px;
+
+    border:none;
+    border-radius:8px;
+
+    background:#18859b;
+    color:#f6f5f5;
+    font-weight:600;
+
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.settings-container button:hover{
+    background:#757775a4;
+}
+h1 {
+    color: #fbfdff;
+    text-align: center;
+}
+.top-nav {
+  display: flex;
+  justify-content: left;
+  gap: 20px;
+  padding: 8px;
+  background: transparent;
+}
+
+.nav-btn {
+  text-decoration: none;
+  color: rgb(255, 253, 253);
+  font-size: 17px;
+  padding: 10px 17px;
+  border-radius: 25px;
+  background: transparent;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.nav-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgb(255, 255, 255);
+}
+nav {
+  width: 100%;              /* Make it span full width */
+  display: flex;            /* Use flexbox for alignment */
+  justify-content: space-between; /* Spread items evenly */
+  align-items: center;      /* Vertically center items */
+  background-color: #fff;   /* Or your preferred color */
+  padding: 10px 20px;       /* Add spacing */
+  box-sizing: border-box;   /* Ensure padding doesn’t shrink width */
+}
+.container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}

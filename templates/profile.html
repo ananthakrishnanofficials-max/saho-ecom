@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Personal Profile | SAHO STORE{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="container-custom profile-wrapper">
+    
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="{% url 'account' %}">Your Account</a> &rsaquo; <span>Personal Profile</span>
+    </nav>
+
+    <div class="profile-header">
+        <h1>Your Profile</h1>
+        <p>Edit the information publicly visible to other shoppers</p>
+    </div>
+
+    <!-- Main Profile Editor -->
+    <div class="profile-editor-container">
+        <form method="POST" action="{% url 'profile_edit' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Avatar Upload Section -->
+            <div class="avatar-section">
+                <div class="avatar-wrapper">
+                    {% if user_profile.avatar %}
+                        <img src="{{ user_profile.avatar.url }}" alt="Profile Avatar" class="avatar-img">
+                    {% else %}
+                        <div class="avatar-placeholder"><i class="fa-solid fa-user"></i></div>
+                    {% endif %}
+                    
+                    <label for="avatar_upload" class="avatar-upload-btn">
+                        <i class="fa-solid fa-camera"></i>
+                    </label>
+                    <input type="file" id="avatar_upload" name="avatar" accept="image/*" style="display: none;">
+                </div>
+                <div class="avatar-info">
+                    <h3>Profile Picture</h3>
+                    <p>Supported files: JPEG, PNG. Max size: 2MB.</p>
+                </div>
+            </div>
+
+            <hr class="profile-divider">
+
+            <!-- Profile Details Form -->
+            <div class="profile-form-grid">
+                
+                <div class="form-group">
+                    <label>Public Name (Alias)</label>
+                    <input type="text" name="display_name" class="form-input" value="{{ user_profile.display_name|default:user.username }}" placeholder="How you want to appear in reviews">
+                    <small>Leave blank to use your real name.</small>
+                </div>
+
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <!-- YYYY-MM-DD format for date inputs -->
+                    <input type="date" name="date_of_birth" class="form-input" value="{{ user_profile.date_of_birth|date:'Y-m-d' }}">
+                </div>
+
+                <div class="form-group full-width">
+                    <label>About Me (Bio)</label>
+                    <textarea name="bio" rows="4" class="form-input" placeholder="Tell us a little about yourself...">{{ user_profile.bio }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select name="gender" class="form-input">
+                        <option value="">Prefer not to say</option>
+                        <option value="M" {% if user_profile.gender == 'M' %}selected{% endif %}>Male</option>
+                        <option value="F" {% if user_profile.gender == 'F' %}selected{% endif %}>Female</option>
+                        <option value="O" {% if user_profile.gender == 'O' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- Form Actions -->
+            <div class="profile-actions">
+                <button type="submit" class="btn-save-profile">Save Profile Changes</button>
+            </div>
+            
+        </form>
+    </div>
+
+</main>
+{% endblock %}

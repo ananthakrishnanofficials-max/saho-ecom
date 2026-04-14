@@ -1,0 +1,94 @@
+version: "3.1"
+nlu:
+- intent: greet
+  examples: |
+    - hello
+    - hi again
+    - hey there
+    - good morning
+    - good evening
+    - hi bot
+    - are you there?
+    - hello saho
+
+- intent: goodbye
+  examples: |
+    - bye
+    - good bye
+    - goodbye
+    - see you later
+    - catch you soon
+    - thanks that's all
+    - I'm done
+    - exit
+
+- intent: product_search
+  examples: |
+    - I want to buy shoes
+    - show me laptops
+    - Do you have any shirts?
+    - search for mobile phones
+    - find me a grocery item
+    - looking for an iphone 15
+    - I need to buy electronic gadgets
+    - help me find a summer dress
+
+- intent: track_order
+  examples: |
+    - Track my Order
+    - where is my order
+    - track my delivery
+    - order status please
+    - has my package shipped
+    - Can you check my delivery status?
+    - where is my package right now
+    - track ID 123456
+
+- intent: faq_shipping
+  examples: |
+    - how long does shipping take?
+    - is delivery free?
+    - how much are delivery charges
+    - when will my item arrive?
+    - do you ship to my city?
+
+- intent: faq_refund
+  examples: |
+    - Return & Refunds
+    - can I return this?
+    - how do I get a refund
+    - what is your return policy
+    - I want to send an item back
+    - is there a money back guarantee?
+
+- intent: faq_payment
+  examples: |
+    - do you accept cash on delivery?
+    - can I pay with UPI?
+    - what payment methods are available?
+    - do you take credit cards?
+    - is cash payment possible
+
+- intent: contact_support
+  examples: |
+    - Contact Support
+    - I want to speak to a human
+    - talk to customer care
+    - get me a real person
+    - contact support
+    - help from a human please
+    - put me through to an agent
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+
+- intent: show_products
+  examples: |
+    - list some items
+    - what do you have
+    - show me products
+    - what is in the store
+    - trending products

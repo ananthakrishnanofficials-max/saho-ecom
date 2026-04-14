@@ -1,0 +1,41 @@
+version: "3.1"
+rules:
+- rule: Say greet anytime
+  steps:
+    - intent: greet
+    - action: utter_greet
+
+- rule: Say goodbye anytime
+  steps:
+    - intent: goodbye
+    - action: utter_goodbye
+
+- rule: Show products when asked
+  steps:
+    - intent: show_products
+    - action: action_show_products
+
+- rule: Handle Shipping FAQ
+  steps:
+    - intent: faq_shipping
+    - action: utter_faq_shipping
+
+- rule: Handle Refund FAQ
+  steps:
+    - intent: faq_refund
+    - action: utter_faq_refund
+
+- rule: Handle Payment FAQ
+  steps:
+    - intent: faq_payment
+    - action: utter_faq_payment
+
+- rule: Handle Contact Support
+  steps:
+    - intent: contact_support
+    - action: utter_contact_support
+
+- rule: Handle Bot Challenge
+  steps:
+    - intent: bot_challenge
+    - action: utter_iamabot

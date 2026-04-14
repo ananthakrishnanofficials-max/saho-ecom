@@ -1,0 +1,65 @@
+{% load static %}
+{% extends "base.html" %}
+{% block content %}
+
+<head>
+    <link rel="stylesheet" href="{% static 'css/category_detail.css' %}">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<h2 class="section-title">{{ category.name }}</h2>
+<div class="category-banner" style="background-image: url('{{ category.image.url }}');">
+    <div class="banner-overlay">
+        <h2 class="banner-title">{{ category.name }}</h2>
+    </div>
+</div>
+
+<div class="grid">
+    {% for product in products %}
+    <div class="card" data-url="{% url 'product_details' product.id %}">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <div class="card-content">
+            <h3>{{ product.name }}</h3>
+            <p class="price">
+                ₹{{ product.price }}
+                {% if product.original_price %}
+                <span class="old-price">₹{{ product.original_price }}</span>
+                {% endif %}
+            </p>
+            <button type="button" onclick="addToCart(event, '{{ product.id }}')" class="add-cart-btn">
+                🛒 Add to Cart
+            </button>
+            <button type="button" onclick="toggleWishlist(event, '{{ product.id }}')" class="wishlist-btn">
+                <span class="heart">♡</span>
+            </button>
+        </div>
+    </div>
+    {% empty %}
+    <p>No products found in {{ category.name }}</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+<div class="filters">
+  <h4>Filter by Price</h4>
+  <input type="number" id="min_price" placeholder="Min ₹">
+  <input type="number" id="max_price" placeholder="Max ₹">
+
+  <h4>Sort Products</h4>
+  <select id="sort_by">
+    <option value="price_asc">Price: Low to High</option>
+    <option value="price_desc">Price: High to Low</option>
+    <option value="newest">Newest First</option>
+    <option value="rating">Top Rated</option>
+  </select>
+
+  <button id="applyFilters">Apply</button>
+</div>
+
+<div id="productGrid">
+  {% include "your_app/product_grid.html" %}
+</div>

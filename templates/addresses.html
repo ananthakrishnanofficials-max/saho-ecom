@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Your Addresses | SAHO STORE{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/addresses.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="container-custom addresses-wrapper">
+    
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <a href="{% url 'account' %}">Your Account</a> &rsaquo; <span>Your Addresses</span>
+    </nav>
+
+    <div class="addresses-header">
+        <h1>Your Addresses</h1>
+    </div>
+
+    <!-- Address Grid -->
+    <div class="address-grid">
+        
+        <!-- Add New Address Card (Clicking opens the modal) -->
+        <div class="address-card add-address-card" onclick="document.getElementById('addAddressModal').style.display='flex'">
+            <div class="add-icon">
+                <i class="fa-solid fa-plus"></i>
+            </div>
+            <h2>Add address</h2>
+        </div>
+
+        <!-- Dynamic Database Loop -->
+        {% for address in saved_addresses %}
+            <div class="address-card {% if address.is_default %}default-address{% endif %}">
+                
+                {% if address.is_default %}
+                    <div class="address-badge">Default</div>
+                {% endif %}
+                
+                <div class="address-content {% if address.is_default %}with-badge{% endif %}">
+                    <h3 class="address-name">{{ address.full_name }}</h3>
+                    <p class="address-line">{{ address.address_line_1 }}</p>
+                    {% if address.address_line_2 %}
+                        <p class="address-line">{{ address.address_line_2 }}</p>
+                    {% endif %}
+                    <p class="address-line">{{ address.city }}, {{ address.state }} {{ address.postal_code }}</p>
+                    <p class="address-line">{{ address.country }}</p>
+                    <p class="address-phone">Phone number: {{ address.phone_number }}</p>
+                    
+                    {% if address.delivery_instructions %}
+                    <p class="delivery-instructions">
+                         <span>Instructions: {{ address.delivery_instructions }}</span>
+                    </p>
+                    {% else %}
+                    <p class="delivery-instructions">
+                         <a href="#">Add delivery instructions</a>
+                    </p>
+                    {% endif %}
+                </div>
+                
+                <div class="address-actions">
+                    <button class="btn-address-edit">Edit</button>
+                    <span class="action-divider">|</span>
+                    <button class="btn-address-remove">Remove</button>
+                    
+                    {% if not address.is_default %}
+                        <span class="action-divider">|</span>
+                        <!-- In a real app, wrap this in a form to submit to the backend -->
+                        <button class="btn-address-default">Set as Default</button>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <!-- What to show if they have NO saved addresses in the DB -->
+            <p style="color: #666; margin-top: 20px;">You currently have no saved addresses.</p>
+        {% endfor %}
+
+    </div>
+</main>
+
+<!-- ADD ADDRESS MODAL -->
+<div id="addAddressModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <span class="close-modal" onclick="document.getElementById('addAddressModal').style.display='none'">&times;</span>
+        <h2>Add a new address</h2>
+        
+        <form method="POST" action="{% url 'addresses' %}" class="address-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="full_name" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Phone Number</label>
+                <input type="text" name="phone_number" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Address Line 1</label>
+                <input type="text" name="address_line_1" required placeholder="Street address, P.O. box, company name">
+            </div>
+            
+            <div class="form-group">
+                <label>Address Line 2</label>
+                <input type="text" name="address_line_2" placeholder="Apartment, suite, unit, building, floor, etc.">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label>City</label>
+                    <input type="text" name="city" required>
+                </div>
+                <div class="form-group half">
+                    <label>State</label>
+                    <input type="text" name="state" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label>Postal Code</label>
+                    <input type="text" name="postal_code" required>
+                </div>
+                <div class="form-group half">
+                    <label>Country</label>
+                    <input type="text" name="country" value="United States" required>
+                </div>
+            </div>
+
+            <div class="form-group checkbox-group">
+                <input type="checkbox" name="is_default" id="is_default">
+                <label for="is_default">Make this my default address</label>
+            </div>
+
+            <button type="submit" class="btn-save-address">Save Address</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+

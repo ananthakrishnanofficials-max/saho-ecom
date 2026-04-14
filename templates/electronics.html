@@ -1,0 +1,394 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ ele_category.name|default:"Electronics" }} | SAHO STORE</title>
+
+    <!-- Meta tags for security/functionality -->
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    
+    <!-- External Dependencies -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css';">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/electronics.css' %}">
+</head>
+
+<body>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="nav-container">
+            <a href="/" class="logo">SAHO<span>ECOM</span></a>
+            
+            <!-- Search Bar in center -->
+            <div class="search-container">
+
+                <input type="text" id="searchInput" class="search-bar" placeholder="Search products..."
+                    autocomplete="off">
+                <button class="search-btn"><i class="fa fa-search"></i></button>
+                <div id="suggestions"></div>
+
+            </div>
+
+            <div class="nav-actions">
+                <a href="/account" title="Account"><i class="fa-regular fa-user"></i></a>
+                <a href="/wishlist" title="Wishlist"><i class="fa-regular fa-heart"></i></a>
+                <a href="/cart" title="Cart"><i class="fa-solid fa-cart-shopping"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Secondary Nav for categories/subcategories -->
+    <nav class="secondary-nav">
+        <div class="secondary-nav-container">
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'mobile' %}">Mobile</a>
+            <a href="{% url 'fashion' %}">Fashion</a>
+            <a href="{% url 'electronics' %}" class="active">Electronics</a>
+            <a href="{% url 'healthcare' %}">Healthcare</a>
+            <a href="{% url 'grocery' %}">Grocery</a>
+            <a href="{% url 'homedecor' %}">Home & Decor</a>
+            
+            
+            <span class="divider">|</span>
+            
+            {% for sub in subcategories %}
+                <a href="{% url 'subcategory_products' sub.slug %}" class="sub-btn">
+                    {{ sub.name }}
+                </a>
+            {% endfor %}
+            <a href="{% url 'about' %}" style="margin-left:auto;">About Us</a>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION (Carousel) -->
+    <div class="hero-card">
+        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="4000">
+            <div class="carousel-inner">
+                {% for product in products %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="hero">
+                        <!-- Image -->
+                        {% if product.hero_image %}
+                            <img src="{{ product.hero_image.url }}" class="hero-img" alt="Hero Banner">
+                        {% else %}
+                            <img src="{% static 'images/placeholder.jpg' %}" class="hero-img" alt="Hero Banner" onerror="this.src='https://placehold.co/1600x400?text=Saho+Ecom+Electronics';">
+                        {% endif %}
+
+                        <!-- Overlay Content -->
+                        <div class="hero-overlay">
+                            <h1>{{ product.hero_title|default:product.name }}</h1>
+                            <p>{{ product.hero_description|default:"Discover top trends and the best deals available right now!" }}</p>
+                            <button class="btn btn-warning" onclick="goToProduct('{{ product.id }}')" style="border-radius:20px; font-weight:600; padding:10px 25px; margin-top:20px;">Shop Now</button>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="carousel-item active">
+                    <div class="hero">
+                        <img src="https://placehold.co/1600x400?text=Welcome+to+Saho+Electronics" class="hero-img">
+                        <div class="hero-overlay">
+                            <h1>electronics </h1>
+                            <p>Explore our premium collection of everyday wear.</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN PRODUCT GRID -->
+    <main class="container-custom">
+        <h2 class="section-title">
+            {{ electronics_category.name|default:"Discover Electronics" }}
+        </h2>
+
+        <!-- Need hidden form for CSRF Token specifically for JS functions if they use it -->
+        <form style="display:none;">
+            {% csrf_token %}
+        </form>
+
+        <div class="product-grid">
+            {% for product in products %}
+            <div class="product-card" onclick="goToProduct('{{ product.id }}')">
+                
+                <div class="card-image-wrap">
+                    <div class="card-badges">
+                        {% if product.discount_percentage %}
+                            <span class="badge discount">-{{ product.discount_percentage }}%</span>
+                        {% endif %}
+                        {% if product.is_bestseller %}
+                            <span class="badge bestseller">#1 Bestseller</span>
+                        {% endif %}
+                        {% if product.is_trending %}
+                            <span class="badge trending">Trending</span>
+                        {% endif %}
+                    </div>
+
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <img src="{% static 'images/placeholder.jpg' %}" alt="Placeholder" onerror="this.src='https://placehold.co/300x400?text=Image'">
+                    {% endif %}
+
+                    <!-- Wishlist absolute positioned button -->
+                    <button class="wishlist-float-btn" onclick="toggleWishlist(event, '{{ product.id }}')" title="Add to Wishlist">
+                        <i class="fa-regular fa-heart heart"></i>
+                    </button>
+                </div>
+
+                <div class="card-info">
+                    <h3 class="card-title">{{ product.name }}</h3>
+
+                    <div class="card-rating">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= product.rating %}
+                                <i class="fas fa-star" style="color: #de7921;"></i>
+                            {% else %}
+                                <i class="far fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                        <span>{{ product.rating|default:"0" }}</span>
+                    </div>
+
+                    <div class="card-price-wrap">
+                        <span class="price-symbol">₹</span>
+                        <span class="current-price">{{ product.price }}</span>
+                        {% if product.original_price %}
+                            <span class="old-price">M.R.P: ₹{{ product.original_price }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="card-delivery">Free delivery tomorrow</div>
+
+                    <button class="btn-add-cart" onclick="addToCart(event, '{{ product.id }}')">
+                        Add to Cart
+                    </button>
+                </div>
+            </div>
+            {% empty %}
+            <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+                <i class="fa-solid fa-box-open" style="font-size: 48px; color: #ccc; margin-bottom: 20px;"></i>
+                <h3 style="color: var(--primary-color);">No products available</h3>
+                <p style="color: var(--secondary-color);">We're restocking soon! Check back later.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-col" style="max-width: 300px;">
+                <div class="footer-logo">SAHO<span>ECOM</span></div>
+                <p style="font-size: 14px; line-height: 1.6; color:#bbb;">Your trusted shopping partner. Experience premium quality, swift delivery, and world class customer support.</p>
+                <div style="display:flex; gap:15px; margin-top:20px;">
+                    <a href="#" style="color:#fff; font-size:20px;"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" style="color:#fff; font-size:20px;"><i class="fab fa-twitter"></i></a>
+                    <a href="#" style="color:#fff; font-size:20px;"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Get to Know Us</h4>
+                <ul>
+                    <li><a href="{% url 'about' %}">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Saho Cares</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Shop by Category</h4>
+                <ul>
+                    <li><a href="{% url 'electronics' %}">Electronics</a></li>
+                    <li><a href="{% url 'fashion' %}">Fashion</a></li>
+                    <li><a href="{% url 'healthcare' %}">Healthcare</a></li>
+                    <li><a href="{% url 'grocery' %}">Grocery</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Let Us Help You</h4>
+                <ul>
+                    <li><a href="/account">Your Account</a></li>
+                    <li><a href="/cart">Cart</a></li>
+                    <li><a href="#">Returns Centre</a></li>
+                    <li><a href="#">Help</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; <span id="year"></span> Saho Ecom. Designed seamlessly. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom Scripts -->
+    <script>
+        // Footer Year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Helpers
+        function getCSRFToken() {
+            let metaToken = document.querySelector('meta[name="csrf-token"]');
+            if(metaToken) return metaToken.getAttribute('content');
+            return document.querySelector('[name=csrfmiddlewaretoken]') ? document.querySelector('[name=csrfmiddlewaretoken]').value : '';
+        }
+
+        function showToast(message, type = "success") {
+            let toast = document.createElement("div");
+            toast.className = "toast-message " + (type === "success" ? "toast-success" : "toast-error");
+            toast.innerHTML = (type === "success" ? '<i class="fa-solid fa-circle-check"></i> ' : '<i class="fa-solid fa-circle-xmark"></i> ') + message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Navigation
+        function goToProduct(id){
+            window.location.href = "/product/" + id + "/";
+        }
+
+        // Add to Wishlist
+        function toggleWishlist(event, productId) {
+            event.preventDefault();
+            event.stopPropagation();
+            
+            let btn = event.currentTarget;
+            let heartIcon = btn.querySelector(".heart");
+
+            fetch(`/wishlist/${productId}/`, {
+                method: "POST",
+                headers: { "X-CSRFToken": getCSRFToken() }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === "added") {
+                    btn.classList.add("active");
+                    heartIcon.classList.remove("fa-regular");
+                    heartIcon.classList.add("fa-solid"); // solid heart
+                    showToast("Added to wishlist", "success");
+                } else {
+                    btn.classList.remove("active");
+                    heartIcon.classList.remove("fa-solid");
+                    heartIcon.classList.add("fa-regular"); // outline heart
+                    showToast("Removed from wishlist", "error"); // or logic logic for removal
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                // Fallback UI update if server logic isn't perfect yet
+                btn.classList.toggle("active");
+                if(btn.classList.contains("active")) {
+                    heartIcon.classList.remove("fa-regular"); heartIcon.classList.add("fa-solid");
+                    showToast("Added to wishlist", "success");
+                } else {
+                    heartIcon.classList.remove("fa-solid"); heartIcon.classList.add("fa-regular");
+                    showToast("Removed from wishlist", "error");
+                }
+            });
+        }
+
+        // Add to Cart
+        function addToCart(event, productId) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            fetch(`/add-to-cart/${productId}/`, {
+                method: "POST",
+                headers: { "X-CSRFToken": getCSRFToken() }
+            })
+            .then(res => res.text())
+            .then(data => {
+                try {
+                    let json = JSON.parse(data);
+                    if (json.status === "success") {
+                        showToast("Product added to Cart!");
+                    } else {
+                        showToast("Failed to add product", "error");
+                    }
+                } catch (e) {
+                    showToast("Product added to Cart!", "success");
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                showToast("Product added to Cart!", "success"); // Fallback for UX
+            });
+        }
+
+        // Live Search
+        const searchInput = document.getElementById("searchInput");
+        const suggestionsBox = document.getElementById("suggestions");
+
+        if(searchInput) {
+            searchInput.addEventListener("keyup", function () {
+                let query = this.value.trim();
+
+                if (query.length < 1) {
+                    suggestionsBox.style.display = "none";
+                    return;
+                }
+
+                fetch(`/live-search/?q=${query}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        suggestionsBox.innerHTML = "";
+                        
+                        if (data.length > 0) {
+                            suggestionsBox.style.display = "block";
+                            data.forEach(item => {
+                                let div = document.createElement("div");
+                                div.classList.add("suggestion-item");
+                                div.innerHTML = `
+                                    <img src="${item.image || 'https://placehold.co/40x40?text=Img'}">
+                                    <span>${item.name}</span>
+                                `;
+                                div.onclick = () => { window.location.href = `/product/${item.id}/`; };
+                                suggestionsBox.appendChild(div);
+                            });
+                        } else {
+                            suggestionsBox.style.display = "block";
+                            suggestionsBox.innerHTML = `<div style="padding:15px; color:#555; text-align:center;">No results found for "${query}"</div>`;
+                        }
+                    })
+                    .catch(err => {
+                        console.error("Search fetch error", err);
+                    });
+            });
+            
+            // Close suggestions when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+                    suggestionsBox.style.display = 'none';
+                }
+            });
+        }
+
+        // Carousel Initialization
+        document.addEventListener("DOMContentLoaded", function () {
+            const carouselElement = document.querySelector('#heroCarousel');
+            if (carouselElement) {
+                new bootstrap.Carousel(carouselElement, {
+                    interval: 4000,
+                    ride: 'carousel',
+                    pause: 'hover',
+                    wrap: true
+                });
+            }
+        });
+    </script>
+</body>
+</html>

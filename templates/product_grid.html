@@ -1,0 +1,29 @@
+{% for sub, products in subcategory_products.items %}
+  <h3>{{ sub.name }}</h3>
+  <div class="grid">
+    {% for product in products %}
+      <div class="card">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <div class="card-content">
+          <h3>{{ product.name }}</h3>
+          <p class="price">₹{{ product.price }}</p>
+        </div>
+      </div>
+    {% empty %}
+      <p>No products in {{ sub.name }}</p>
+    {% endfor %}
+  </div>
+{% endfor %}
+<script>
+document.getElementById("applyFilters").addEventListener("click", function() {
+    const minPrice = document.getElementById("min_price").value;
+    const maxPrice = document.getElementById("max_price").value;
+    const sortBy = document.getElementById("sort_by").value;
+
+    fetch(window.location.pathname + "?ajax=1&min_price=" + minPrice + "&max_price=" + maxPrice + "&sort=" + sortBy)
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById("productGrid").innerHTML = html;
+      });
+});
+</script>

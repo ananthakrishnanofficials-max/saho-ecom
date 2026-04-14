@@ -1,0 +1,64 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - product_search
+  - track_order
+  - show_products
+  - faq_shipping
+  - faq_refund
+  - faq_payment
+  - contact_support
+  - bot_challenge
+  - affirm
+  - deny
+
+slots:
+  order_id:
+    type: text
+    mappings:
+      - type: from_text
+
+  product_name:
+    type: text
+    mappings:
+      - type: from_text
+
+responses:
+  utter_greet:
+    - text: "Hi there! 👋 I'm your Saho virtual assistant. How can I make your shopping experience amazing today?"
+    - text: "Welcome to Saho Ecom! ✨ I'm here to help you find products, track your orders, or answer any questions."
+
+  utter_goodbye:
+    - text: "Thanks for visiting Saho Store! If you need anything else, I'll be right here. Have a great day! 😊"
+    - text: "Goodbye! We hope to see you shopping with us again soon. 🛍️"
+
+  utter_product_search:
+    - text: "I'd love to help you find exactly what you're looking for! What product or category do you need?"
+
+  utter_track_order:
+    - text: "I can absolutely track that for you 📦. Please give me your 6-digit Order ID so I can look it up."
+
+  utter_faq_shipping:
+    - text: "🚚 We offer FREE shipping on all orders over ₹999! Standard delivery takes 3-5 business days depending on your location in India."
+
+  utter_faq_refund:
+    - text: "Not 100% satisfied? No worries! 🤝 You can return most items within 7 days of delivery for a full refund or exchange. Just click on 'Account' at the top to begin a return."
+
+  utter_faq_payment:
+    - text: "💳 We accept Visa, Mastercard, RuPay, UPI (GPay/PhonePe), NetBanking, and Cash on Delivery (COD) for your convenience."
+
+  utter_contact_support:
+    - text: "I understand you need more specific help. Let me connect you with one of our human support agents right away. Please hold on for just a moment! 👨‍💻"
+
+  utter_iamabot:
+    - text: "I am your friendly AI assistant, built to help you shop faster! 🤖 But I'm learning new human tricks every day."
+
+  utter_anything_else:
+    - text: "Is there anything else I can assist you with today?"
+
+actions:
+  - action_track_order
+  - action_product_search
+  - action_show_products

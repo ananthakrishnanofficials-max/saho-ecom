@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Your Orders | SAHO STORE{% endblock %}
+
+{% block extra_css %}
+<!-- Specific CSS for the Orders History Page -->
+<link rel="stylesheet" href="{% static 'css/orders.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="container-custom orders-wrapper">
+    
+    <!-- Account Navigation Breadcrumb -->
+    <div class="breadcrumb">
+        <a href="{% url 'account' %}">Your Account</a> &rsaquo; <span>Your Orders</span>
+    </div>
+
+    <!-- Header & Search -->
+    <div class="orders-header">
+        <h1>Your Orders</h1>
+        <div class="orders-search">
+            <input type="text" placeholder="Search all orders" class="search-input">
+            <button class="btn-dark">Search Orders</button>
+        </div>
+    </div>
+
+    <!-- Quick Filters Tabs -->
+    <div class="order-tabs">
+        <a href="#" class="active">Orders</a>
+        <a href="#">Buy Again</a>
+        <a href="#">Not Yet Shipped</a>
+        <a href="#">Cancelled Orders</a>
+    </div>
+
+    <!-- Dropdown Filters -->
+    <div class="orders-filter">
+        <span style="font-weight:600; font-size:14px; margin-right:8px;">
+            <strong>{{ orders|length|default:"0" }} orders</strong> placed in
+        </span>
+        <select>
+            <option>past 30 days</option>
+            <option selected>past 3 months</option>
+            <option>2024</option>
+            <option>2023</option>
+        </select>
+    </div>
+
+    <!-- Orders List Container -->
+    <div class="orders-list">
+        {% if orders %}
+            {% for order in orders %}
+            
+            <div class="order-card">
+                
+                <!-- Card Header (Grey Header bar) -->
+                <div class="order-header">
+                    <div class="header-group">
+                        <div class="header-block">
+                            <span class="label">ORDER PLACED</span>
+                            <span class="value">{{ order.created_at|date:"d F Y"|default:"Today" }}</span>
+                        </div>
+                        <div class="header-block">
+                            <span class="label">TOTAL</span>
+                            <span class="value">₹ {{ order.total_amount|default:"--" }}</span>
+                        </div>
+                        <div class="header-block">
+                            <span class="label">SHIP TO</span>
+                            <span class="value user-dropdown">{{ user.get_full_name|default:user.username|default:"Buyer" }} <i class="fa-solid fa-chevron-down" style="font-size:10px; margin-left:3px; color:#555;"></i></span>
+                        </div>
+                    </div>
+                    
+                    <div class="header-block right-aligned">
+                        <span class="label">ORDER # {{ order.id }}</span>
+                        <div class="order-actions-links">
+                            <a href="#">View order details</a> <span class="sep">|</span> <a href="#">Invoice</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Body (Contents & Actions) -->
+                <div class="order-body">
+                    
+                    <div class="order-status-banner">
+                        {% if order.status|lower == "delivered" %}
+                            <h3>Delivered Successfully</h3>
+                        {% elif order.status|lower == "processing" %}
+                            <h3 style="color:#e77600;">Processing Order</h3>
+                        {% elif order.status|lower == "cancelled" %}
+                            <h3 style="color:#c40000;">Cancelled</h3>
+                        {% else %}
+                            <!-- Fallback status -->
+                            <h3>{{ order.status|default:"Arriving soon" }}</h3>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="order-items-layout">
+                        
+                        <!-- Product Info -->
+                        <div class="order-item">
+                            <div class="item-img">
+                                <img src="{% static 'images/placeholder.jpg' %}" onerror="this.src='https://placehold.co/100x100?text=Product'">
+                            </div>
+                            <div class="item-details">
+                                <a href="#" class="product-title">{{ order.product_name|default:"Sample Product Name from Order" }}</a>
+                                <p class="seller">Sold by: SAHO Ecom Logistics</p>
+                                <div class="item-action-btns">
+                                    <button class="btn-primary" style="padding: 6px 15px; font-size:13px; margin-top:8px;">Buy it again</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar Action Buttons for tracking/returning -->
+                        <div class="order-action-sidebar">
+                            <button class="btn-secondary">Track package</button>
+                            <button class="btn-secondary" style="border-top-color:#d5d9d9;">Return or replace items</button>
+                            <!-- Spacer -->
+                            <div style="height:10px;"></div>
+                            <button class="btn-secondary">Leave seller feedback</button>
+                            <button class="btn-secondary">Write a product review</button>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            
+        {% else %}
+            <!-- Empty State UI if no orders exist -->
+            <div class="empty-orders text-center">
+                <i class="fa-solid fa-box-open" style="font-size:60px; color:#ddd; margin-bottom:20px;"></i>
+                <h2>Looks like you haven't placed an order yet!</h2>
+                <p style="color:var(--secondary-color); margin-bottom:20px;">Check out what's currently trending in our store.</p>
+                <a href="{% url 'home' %}" class="btn-primary" style="text-decoration:none; display:inline-block;">Start Shopping</a>
+            </div>
+        {% endif %}
+    </div>
+    
+</main>
+{% endblock %}

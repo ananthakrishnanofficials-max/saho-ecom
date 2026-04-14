@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Your Account | SAHO STORE{% endblock %}
+
+{% block extra_css %}
+
+<!-- Specific CSS for Account Settings Page -->
+<link rel="stylesheet" href="{% static 'css/account.css' %}">
+{% endblock %}
+
+{% block content %}
+<main class="container-custom account-wrapper">
+    
+    <div class="account-header">
+        <h1>Your Account</h1>
+    </div>
+
+    
+       <!-- Secondary Profile Section -->
+    <div class="account-settings-form">
+        <h2>Personal Profile</h2>
+        <div class="profile-card">
+            
+            <!-- Check if the user has a profile and an uploaded avatar image -->
+            <div class="profile-avatar" style="overflow: hidden;">
+                {% if user.profile.avatar %}
+                    <!-- Display their uploaded photo -->
+                    <img src="{{ user.profile.avatar.url }}" alt="Profile Pic" style="width: 100%; height: 100%; object-fit: cover;">
+                {% else %}
+                    <!-- Default generic icon if they haven't uploaded one -->
+                    <i class="fa-solid fa-user"></i>
+                {% endif %}
+            </div>
+            
+            <div class="profile-details">
+                <!-- Uses Django auth user object gracefully with fallbacks -->
+                <p class="profile-name">{{ user.get_full_name|default:user.username|default:"Logged In User" }}</p>
+                <p class="profile-email"><i class="fa-regular fa-envelope"></i> {{ user.email|default:"No email registered" }}</p>
+                <p class="profile-joined">Customer since {{ user.date_joined|date:"Y"|default:"2024" }}</p>
+            </div>
+            
+            <div class="profile-actions">
+                <a href="{% url 'profile_edit' %}" class="btn-edit-profile">Edit Profile</a>
+                <a href="{% url 'logout' %}" class="btn-logout">Sign Out</a>
+            </div>
+
+        </div>
+    </div>
+
+<hr class="account-divider">
+
+    <!-- Main grid of interactive account options (Standard Ecom Layout) -->
+    <div class="account-grid">
+        
+        <!-- Orders -->
+        <a href="{% url 'orders' %}" class="account-card">
+            <div class="ac-icon"><i class="fa-solid fa-box-open"></i></div>
+            <div class="ac-info">
+                <h3>Your Orders</h3>
+                <p>Track, return, or buy things again</p>
+            </div>
+        </a>
+
+        <!-- Login & Security -->
+        <a href="{% url 'settings' %}" class="account-card">
+            <div class="ac-icon"><i class="fa-solid fa-shield-halved"></i></div>
+            <div class="ac-info">
+                <h3>Login & Security</h3>
+                <p>Edit login, name, and mobile number</p>
+            </div>
+        </a>
+
+        <!-- Membership (Optional premium feel) -->
+        <a href="{% url 'saho_plus' %}" class="account-card">
+            <div class="ac-icon"><i class="fa-solid fa-star"></i></div>
+            <div class="ac-info">
+                <h3>Saho Plus</h3>
+                <p>View benefits and premium settings</p>
+            </div>
+        </a>
+
+        <!-- Addresses -->
+        <a href="{% url 'addresses' %}" class="account-card">
+            <div class="ac-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div class="ac-info">
+                <h3>Your Addresses</h3>
+                <p>Edit addresses for orders and gifts</p>
+            </div>
+        </a>
+
+        <!-- Payment Options -->
+        <a href="{% url 'payment_options' %}" class="account-card">
+            <div class="ac-icon"><i class="fa-regular fa-credit-card"></i></div>
+            <div class="ac-info">
+                <h3>Payment options</h3>
+                <p>Edit or add payment methods</p>
+            </div>
+        </a>
+
+        <!-- Contact Us -->
+        <a href="{% url 'contact' %}" class="account-card">
+            <div class="ac-icon"><i class="fa-solid fa-headset"></i></div>
+            <div class="ac-info">
+                <h3>Contact Us</h3>
+                <p>Get help with your recent purchases</p>
+            </div>
+        </a>
+    </div>
+
+    <hr class="account-divider">
+
+
+
+    </div>
+    
+</main>
+{% endblock %}

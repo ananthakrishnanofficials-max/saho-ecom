@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Festival Sales | SAHO STORE{% endblock %}
+
+{% block extra_css %}
+<!-- Specific CSS for Festival Page -->
+<link rel="stylesheet" href="{% static 'css/festival.css' %}">
+{% endblock %}
+
+{% block content %}
+<!-- Festival Hero Banner with Countdown -->
+<div class="festival-header-wrapper">
+    <div class="festival-banner">
+        <div class="festival-content">
+            <h1>🎇 Great Indian Festival Sale 🎇</h1>
+            <p>Unbeatable deals across all categories! Valid for a limited time.</p>
+            
+            <div id="countdown" class="countdown-timer">
+                <div><span id="days">00</span><p>Days</p></div>
+                <div><span id="hours">00</span><p>Hours</p></div>
+                <div><span id="mins">00</span><p>Mins</p></div>
+                <div><span id="secs">00</span><p>Secs</p></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main class="container-custom">
+    <h2 class="section-title">Exclusive Festive Deals</h2>
+
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card" onclick="goToProduct('{{ product.id }}')">
+            
+            <div class="card-image-wrap">
+                <div class="card-badges">
+                    <span class="badge fest-badge">Blockbuster Deal</span>
+                    {% if product.discount_percentage %}
+                        <span class="badge discount">-{{ product.discount_percentage }}%</span>
+                    {% endif %}
+                </div>
+
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                    <img src="{% static 'images/placeholder.jpg' %}" alt="Placeholder" onerror="this.src='https://placehold.co/300x300?text=Festive+Deal'">
+                {% endif %}
+
+                <!-- Relying on the toggleWishlist from base.html -->
+                <button class="wishlist-float-btn" onclick="toggleWishlist(event, '{{ product.id }}')" title="Add to Wishlist">
+                    <i class="fa-regular fa-heart heart"></i>
+                </button>
+            </div>
+
+            <div class="card-info">
+                <h3 class="card-title">{{ product.name }}</h3>
+
+                <div class="card-rating">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= product.rating|default:4 %}
+                            <i class="fas fa-star" style="color: #de7921;"></i>
+                        {% else %}
+                            <i class="far fa-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                    <span>{{ product.rating|default:"0" }}</span>
+                </div>
+
+                <div class="card-price-wrap">
+                    <span class="price-symbol">₹</span>
+                    <span class="current-price">{{ product.price }}</span>
+                    {% if product.original_price %}
+                        <span class="old-price">M.R.P: ₹{{ product.original_price }}</span>
+                    {% endif %}
+                </div>
+                
+                <p class="description-snippet">{{ product.description|truncatewords:8 }}</p>
+
+                <!-- Relying on the addToCart from base.html -->
+                <button class="btn-add-cart" onclick="addToCart(event, '{{ product.id }}')">
+                    Claim Deal
+                </button>
+            </div>
+        </div>
+        {% empty %}
+        <div style="grid-column: 1/-1; text-align: center; padding: 50px;">
+            <i class="fa-solid fa-gift" style="font-size: 48px; color: #ccc; margin-bottom: 20px;"></i>
+            <h3 style="color: var(--primary-color);">No festive products available right now</h3>
+            <p style="color: var(--secondary-color);">Our sale hasn't started or is currently out of stock. Stay tuned!</p>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Click navigation for the whole card
+    function goToProduct(id){
+        window.location.href = "/product/" + id + "/";
+    }
+
+    // Dynamic Countdown Timer (Real-life sale feel)
+    const countDownDate = new Date().getTime() + (3 * 24 * 60 * 60 * 1000); // 3 Days from right now
+    
+    const x = setInterval(function() {
+        const now = new Date().getTime();
+        const distance = countDownDate - now;
+        
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        
+        document.getElementById("days").innerHTML = days < 10 ? '0'+days : days;
+        document.getElementById("hours").innerHTML = hours < 10 ? '0'+hours : hours;
+        document.getElementById("mins").innerHTML = minutes < 10 ? '0'+minutes : minutes;
+        document.getElementById("secs").innerHTML = seconds < 10 ? '0'+seconds : seconds;
+        
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("countdown").innerHTML = "SALE ENDED";
+        }
+    }, 1000);
+</script>
+{% endblock %}

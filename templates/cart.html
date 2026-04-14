@@ -1,0 +1,204 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart | Saho Ecom</title>
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/cart.css' %}">
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="main-header">
+        <div class="nav-container">
+            <a href="{% url 'home' %}" class="logo">SAHO<span>ECOM</span></a>
+            <nav class="nav-links">
+                <a href="{% url 'fashion' %}">Fashion</a>
+                <a href="{% url 'mobile' %}">Mobile</a>
+                <a href="{% url 'homedecor' %}">Home & decor</a>
+                <a href="{% url 'electronics' %}">Electronics</a>
+                <a href="{% url 'healthcare' %}">Healthcare</a>
+                <a href="{% url 'grocery' %}">Grocery</a>
+            </nav>
+            <div class="nav-actions">
+                <a href="/account" title="Account"><i class="fa-regular fa-user"></i></a>
+                <a href="{% url 'cart' %}" title="Cart" class="active"><i class="fa-solid fa-cart-shopping"></i></a>
+            </div>
+        </div>
+    </header>
+
+    <main class="cart-page-container">
+        
+        <!-- LEFT SIDE: Cart Items -->
+        <div class="cart-left">
+            <div class="cart-header">
+                <h2>Shopping Cart</h2>
+                {% if cart_items %}
+                    <span class="item-count-badge">{{ cart_items|length }} Items</span>
+                {% endif %}
+            </div>
+            
+            <div class="cart-items-list">
+                {% for item in cart_items %}
+                <div class="cart-item-card">
+                    <!-- Product Image -->
+                    <div class="item-image-wrapper">
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                        {% else %}
+                            <img src="{% static 'images/placeholder.jpg' %}" alt="Placeholder" onerror="this.src='https://placehold.co/150x150?text=Image'">
+                        {% endif %}
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="item-details">
+                        <div class="item-title-row">
+                            <h4 class="item-title">{{ item.product.name }}</h4>
+                            <div class="item-price-mobile">₹ {{ item.product.price }}</div>
+                        </div>
+                        <p class="item-category">{{ item.product.category|default:"Category" }}</p>
+                        
+                        <div class="item-stock-status">In Stock</div>
+                        <div class="item-sold-by">Sold by: Saho Ecom</div>
+
+                        <div class="item-actions-row">
+                            <!-- Quantity -->
+                            <div class="quantity-selector">
+                                <a href="{% url 'decrease_qty' item.id %}" class="qty-btn" title="Decrease"><i class="fa-solid fa-minus"></i></a>
+                                <span class="qty-value">{{ item.quantity }}</span>
+                                <a href="{% url 'increase_qty' item.id %}" class="qty-btn" title="Increase"><i class="fa-solid fa-plus"></i></a>
+                            </div>
+
+                            <span class="action-divider">|</span>
+
+                            <!-- Remove -->
+                            <a href="{% url 'remove_cart' item.id %}" class="remove-btn" title="Remove from cart">
+                                <i class="fa-regular fa-trash-can"></i> Delete
+                            </a>
+                            
+                            <span class="action-divider">|</span>
+                            <a href="#" class="save-later-btn">Save for later</a>
+                        </div>
+                    </div>
+
+                    <!-- Price Desk -->
+                    <div class="item-price-desk">
+                        ₹ {{ item.product.price }}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="empty-cart-message">
+                    <i class="fa-solid fa-cart-arrow-down empty-cart-icon"></i>
+                    <h3>Your cart is empty</h3>
+                    <p>Looks like you haven't added anything to your cart yet.</p>
+                    <a href="{% url 'home' %}" class="btn-primary mt-3">Start Shopping</a>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% if cart_items %}
+            <div class="cart-footer-actions">
+                <a href="{% url 'home' %}" class="continue-shopping">
+                    <i class="fa-solid fa-arrow-left"></i> Continue Shopping
+                </a>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- RIGHT SIDE: Order Summary -->
+        {% if cart_items %}
+        <div class="cart-right">
+            <div class="summary-card">
+                <h3>Order Summary</h3>
+                
+                <div class="summary-body">
+                    <div class="summary-row">
+                        <span class="label">Items ({{ cart_items|length }}):</span>
+                        <span class="value">₹ {{ subtotal }}</span>
+                    </div>
+
+                    <div class="summary-row shipping-row">
+                        <span class="label">Shipping:</span>
+                        <select class="shipping-select">
+                            <option value="standard">Standard Delivery {{ delivery }}</option>
+                            <option value="express">Express Delivery - ₹100</option>
+                        </select>
+                    </div>
+
+                    <!-- Coupon Area -->
+                    <div class="coupon-area">
+                        <label class="coupon-label">Gift Card or Discount Code</label>
+                        <div class="coupon-input-group">
+                            <input type="text" placeholder="Enter code">
+                            <button class="btn-secondary">Apply</button>
+                        </div>
+                    </div>
+
+                    <hr class="summary-divider">
+
+                    <div class="summary-row total-row">
+                        <span class="label">Order Total:</span>
+                        <span class="value">₹ {{ total }}</span>
+                    </div>
+                </div>
+
+                <div class="summary-footer">
+                    <a href="{% url 'checkout' %}" class="checkout-link">
+                        <button class="btn-primary checkout-btn">
+                            Proceed to Checkout
+                        </button>
+                    </a>
+                    
+                    <div class="secure-checkout-badge">
+                        <i class="fa-solid fa-lock"></i> Secure Checkout
+                    </div>
+                </div>
+            </div>
+
+            <div class="accepted-payments">
+                <i class="fa-brands fa-cc-visa"></i>
+                <i class="fa-brands fa-cc-mastercard"></i>
+                <i class="fa-brands fa-cc-paypal"></i>
+                <i class="fa-brands fa-cc-amex"></i>
+            </div>
+        </div>
+        {% endif %}
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-col" style="max-width: 300px;">
+                <div class="footer-logo">SAHO<span>ECOM</span></div>
+                <p>Your trusted shopping partner. Experience premium quality, swift delivery, and world class customer support.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Get to Know Us</h4>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Saho Cares</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Let Us Help You</h4>
+                <ul>
+                    <li><a href="/account">Your Account</a></li>
+                    <li><a href="#">Returns Centre</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; <span id="year"></span> Saho Ecom. Designed seamlessly. All rights reserved.</div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
